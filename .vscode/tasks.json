@@ -1,0 +1,33 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Build Current File",
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "-Wall",
+                "${file}",
+                "-o",
+                "${workspaceFolder}/bin/${fileBasenameNoExtension}"
+            ],
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
+        },
+        {
+            "label": "Build and Run",
+            "type": "shell",
+            "command": "gcc",
+            "args": [
+                "${workspaceFolder}/src/main.c",
+                "-o",
+                "${workspaceFolder}/bin/${workspaceFolderBasename}"
+            ],
+            "group": "build"
+        }
+    ]
+}
