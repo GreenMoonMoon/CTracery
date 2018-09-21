@@ -1,9 +1,5 @@
 #include "hello_world.h"
 
-struct State
-{
-};
-
 int main()
 {
     generateState();
@@ -13,7 +9,10 @@ int main()
 
 void generateState()
 {
-    State *s = malloc((int)sizeof(State));
+    /*These variables represent a general satuts*/
+    char *dragonStatus = "alive";
+    char *princessStatus = "kidnapped";
+    char *knightStatus = "unaware";
 }
 
 void testMalloc(int size)
