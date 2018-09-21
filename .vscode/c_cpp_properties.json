@@ -3,8 +3,7 @@
         {
             "name": "Linux",
             "includePath": [
-                "${workspaceFolder}/**",
-                "${workspaceFolder}/include"
+                "${workspaceFolder}/**"
             ],
             "defines": [],
             "compilerPath": "/bin/gcc",
@@ -15,8 +14,7 @@
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": "",
                 "path": [
-                    "${workspaceFolder}/**",
-                    "${workspaceFolder}/include"
+                    "${workspaceFolder}/**"
                 ]
             }
         }
