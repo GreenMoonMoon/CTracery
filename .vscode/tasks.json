@@ -8,26 +8,15 @@
             "type": "shell",
             "command": "gcc",
             "args": [
-                "-Wall",
                 "${file}",
                 "-o",
-                "${workspaceFolder}/bin/${fileBasenameNoExtension}"
+                "${workspaceFolder}/bin/${fileBasenameNoExtension}",
+                "-Wall"
             ],
             "group": {
                 "kind": "build",
                 "isDefault": true
             }
-        },
-        {
-            "label": "Build and Run",
-            "type": "shell",
-            "command": "gcc",
-            "args": [
-                "${workspaceFolder}/src/main.c",
-                "-o",
-                "${workspaceFolder}/bin/${workspaceFolderBasename}"
-            ],
-            "group": "build"
         }
     ]
 }
