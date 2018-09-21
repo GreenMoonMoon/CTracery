@@ -1,12 +1,19 @@
 #include "hello_world.h"
 
+struct State
+{
+};
+
 int main()
 {
-    /*General comments about this function*/
-    // printf("Hello world\n");
-    testMalloc(10);
+    generateState();
 
     return 0;
+}
+
+void generateState()
+{
+    State *s = malloc((int)sizeof(State));
 }
 
 void testMalloc(int size)

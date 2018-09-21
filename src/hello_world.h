@@ -2,4 +2,4 @@
 #include <stdlib.h>
 
 void testMalloc(int);
-void testEntities();
+void generateState();

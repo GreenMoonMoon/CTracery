@@ -14,7 +14,7 @@
                 "limitSymbolsToIncludedHeaders": true,
                 "databaseFilename": "",
                 "path": [
-                    "${workspaceFolder}/**"
+                "${workspaceFolder}/**"
                 ]
             }
         }
