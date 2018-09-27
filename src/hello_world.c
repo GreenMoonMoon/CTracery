@@ -2,17 +2,15 @@
 
 int main()
 {
-    generateState();
+    int a;
+    scanf("%d", &a);
+    int b[] = {a};
+    int c[5] = {a};
+
+    printf("array b index 1: %d\n", b[0]);
+    printf("array c index 1: %d\n", c[0]);
 
     return 0;
-}
-
-void generateState()
-{
-    /*These variables represent a general satuts*/
-    // char *dragonStatus = "alive\n";
-    // char *princessStatus = "kidnapped";
-    // char *knightStatus = "unaware";
 }
 
 void testMalloc(int size)
