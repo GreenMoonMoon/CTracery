@@ -1,0 +1,12 @@
+{
+    "name":[
+        "bob",
+        "steve",
+        "carol"
+    ],
+    "location": [
+        "castle",
+        "lair",
+        "forest"
+    ]
+}

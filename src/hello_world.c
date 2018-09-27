@@ -10,9 +10,9 @@ int main()
 void generateState()
 {
     /*These variables represent a general satuts*/
-    char *dragonStatus = "alive";
-    char *princessStatus = "kidnapped";
-    char *knightStatus = "unaware";
+    // char *dragonStatus = "alive\n";
+    // char *princessStatus = "kidnapped";
+    // char *knightStatus = "unaware";
 }
 
 void testMalloc(int size)

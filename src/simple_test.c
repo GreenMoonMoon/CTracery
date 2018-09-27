@@ -1,9 +1,8 @@
 #include <stdio.h>
+#include <string.h>
 #include "hello_world.h"
 
 #define FAIL() printf("\nfailure in %s() line %d\n", __func__, __LINE__)
-
-int tests_run = 0;
 
 #define _assert(test) \
     do                \
@@ -14,6 +13,7 @@ int tests_run = 0;
             return 1; \
         }             \
     } while (0)
+
 #define _verify(test)   \
     do                  \
     {                   \
@@ -23,15 +23,26 @@ int tests_run = 0;
             return r;   \
     } while (0)
 
+int tests_run = 0;
+
 int test_a()
 {
     _assert(25 == 25);
     return 0;
 }
 
+int test_b()
+{
+    char *s = "super";
+    int result = strcmp("super", s);
+    _assert(result);
+    return 0;
+}
+
 int all_tests()
 {
     _verify(test_a);
+    _verify(test_b);
     return 0;
 }
 
