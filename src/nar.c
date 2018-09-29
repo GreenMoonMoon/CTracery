@@ -9,12 +9,14 @@ struct Component
 
 struct State
 {
-    /* data */
+    struct Component *components;
+    struct Action *actions;
 };
  
 struct Action
 {
-    /* data */
+    struct Component component;
+    int value;
 };
  
 struct Component NewComponent(char *id, char *values[]){
