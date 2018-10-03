@@ -1,16 +1,37 @@
+#include <stdarg.h>
+#include <string.h>
 #include "hello_world.h"
+
+void testVarArg(int* arr, int count, ...);
 
 int main()
 {
-    int a;
-    scanf("%d", &a);
-    int b[] = {a};
-    int c[5] = {a};
+    int *arrayOfInt;
+    testVarArg(arrayOfInt, 1, 2, 3, 4, 5);
 
-    printf("array b index 1: %d\n", b[0]);
-    printf("array c index 1: %d\n", c[0]);
+    printf("This array was created with testVarArg!\n");
+    int i;
+    for(i = 0; i < 5; i++){
+        printf("%d, ", arrayOfInt[i]);
+    }
+    printf("\n");
 
     return 0;
+}
+
+void testVarArg(int * arr, int count, ...)
+{
+    va_list args;
+    int arrayOfInt[count]; // Static data
+
+    va_start(args, count);
+    int i;
+    for(i=0;i<count;i++){
+        arrayOfInt[i] = va_arg(args, int);
+    }
+    va_end(args);
+
+    arr = arrayOfInt; // cannot return an array this way
 }
 
 void testMalloc(int size)

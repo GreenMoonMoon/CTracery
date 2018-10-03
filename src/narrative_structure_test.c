@@ -1,8 +1,18 @@
 #include <stdio.h>
+
+#include "Component.h"
+
+//Unit test marco.
 #include "unittest.h"
 
-int TestDeclareComponentType(){return 0;}
-int TestDeclareComponentInstance(){return 0;}
+int TestDeclareComponentType(){
+
+    return 0;
+}
+
+int TestDeclareComponentInstance(){
+    return 0;
+}
 
 int all_tests()
 {
