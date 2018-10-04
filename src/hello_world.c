@@ -43,7 +43,7 @@ void testMalloc(int size)
         printf("malloc failed");
         exit(1);
     }
-    int darray_size = size * sizeof(int);
+    size_t darray_size = size * sizeof(int);
     int array[10];
     printf("size of 10 int array: %d\n", (int)sizeof(array));
     printf("supposed size of %d int array: %d\n", size, darray_size);

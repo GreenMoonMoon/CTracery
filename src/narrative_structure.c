@@ -2,8 +2,6 @@
 #include <stdlib.h>
 #include <stdarg.h>
 
-#include "Component.h"
-
 typedef struct Component
 {
     char id;
