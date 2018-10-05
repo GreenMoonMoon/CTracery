@@ -1,10 +1,13 @@
+#ifndef NARRATIVE_ENGINE
+#define NARRATIVE_ENGINE
+
 #include <stdlib.h>
 #include <stdarg.h>
 
 struct Component
 {
-    char id;
-    char **values;
+    char *id;
+    char *values;
     int current;
 };
 
@@ -21,3 +24,5 @@ struct Action
 };
 
 struct Component NewInstance(struct Component c);
+
+#endif

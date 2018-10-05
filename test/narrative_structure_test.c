@@ -2,12 +2,14 @@
 
 #include "unittest.h"
 
-int TestDeclareComponentType(){
+int TestDeclareComponentType()
+{
 
     return 0;
 }
 
-int TestDeclareComponentInstance(){
+int TestDeclareComponentInstance()
+{
     return 0;
 }
 
@@ -15,6 +17,7 @@ int all_tests()
 {
     _verify(TestDeclareComponentType);
     _verify(TestDeclareComponentInstance);
+    
     return 0;
 }
 

@@ -6,6 +6,10 @@ typedef struct Action action;
 
 component NewInstance(component c)
 {
-    component co = {};
+    component co = {
+        .id="test",
+        .values="alive|dead",
+        .current=0,
+    };
     return co;
 }
