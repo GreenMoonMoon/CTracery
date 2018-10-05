@@ -1,8 +1,5 @@
 #include <stdio.h>
 
-#include "Component.h"
-
-//Unit test marco.
 #include "unittest.h"
 
 int TestDeclareComponentType(){

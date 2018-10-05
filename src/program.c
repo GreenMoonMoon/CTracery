@@ -1,21 +1,15 @@
 #include <stdarg.h>
 #include <string.h>
-#include "hello_world.h"
+#include <stdio.h>
+#include <stdlib.h>
 
+void testMalloc(int);
+void generateState();
 void testVarArg(int* arr, int count, ...);
 
 int main()
 {
-    int *arrayOfInt;
-    testVarArg(arrayOfInt, 1, 2, 3, 4, 5);
-
-    printf("This array was created with testVarArg!\n");
-    int i;
-    for(i = 0; i < 5; i++){
-        printf("%d, ", arrayOfInt[i]);
-    }
-    printf("\n");
-
+    printf("Narrative Engine\n");
     return 0;
 }
 
@@ -46,7 +40,7 @@ void testMalloc(int size)
     size_t darray_size = size * sizeof(int);
     int array[10];
     printf("size of 10 int array: %d\n", (int)sizeof(array));
-    printf("supposed size of %d int array: %d\n", size, darray_size);
+    printf("supposed size of %d int array: %d\n", (int)size, darray_size);
     printf("size of darray: %d\n", (int)sizeof(darray));
     printf("size of int: %d\n", (int)sizeof(int));
 

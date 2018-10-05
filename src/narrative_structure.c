@@ -1,27 +1,11 @@
-/*Narrative Engine structure*/
-#include <stdlib.h>
-#include <stdarg.h>
+#include "narrative_structure.h"
 
-typedef struct Component
+typedef struct Component component;
+typedef struct State state;
+typedef struct Action action;
+
+component NewInstance(component c)
 {
-    char id;
-    char **values;
-    int current;
-} Component;
-
-// struct State
-// {
-//     struct Component *components;
-//     struct Action *actions;
-// } State;
-
-// struct Action
-// {
-//     struct Component component;
-//     int value;
-// } Action;
-
-Component *NewInstance(Component c)
-{
-    return &c;
+    component co = {};
+    return co;
 }
