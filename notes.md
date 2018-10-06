@@ -62,6 +62,10 @@ Gather all relevant data from the player playstyle. Such as which NPCs is spoken
 - [ ] Create a basic parser for reading and writing [component](#component) declarations.
 - [ ] Create the structure for [States](#states) and [Actions](#actions).
 - [ ] Refactor the paragraph about [narrative composition](#narrative-composition)
+
+# General C Notes
+* Always pass a pointer to a struct instead of the struct itself. This is because C always pass attribute as value. Even if the struct content isn't modified, this way we don't copy the whole struct content on the stack.
+* Be carefule of the scope. When returning a pointer, make sure not to return a pointer to a local value (function argument or locally declared variable). However returning a pointer to a dynamically allocated memory is fine, be careful however to free the memory once you're done with it *(migth be best to allocate the memory first and pass a pointer to it, so it's clear who allocated the memory in the fisrt place)* .
 # Table of contents
 - [General Notes](#general-notes)
     - [Basic Data Structure](#basic-data-structure)
@@ -75,4 +79,5 @@ Gather all relevant data from the player playstyle. Such as which NPCs is spoken
     - [Generator](#generator)
     - [Interrest monitoring system](#interrest-monitoring-system)
 - [TODOs](#todos)
+- [General C Notes](#general-c-notes)
 - [Table of contents](#table-of-contents)
