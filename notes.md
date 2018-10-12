@@ -1,7 +1,9 @@
 # General Notes
+## Summary
 The narrative engine is composed of 2(*3?*) distinc parts. The data structure, the generator and the interrest monitoring system.
 
-The building blocks of strories are actors, their actions, their motivations, events, locations, etc. The chalenge is to define them for a computer. The current goal is to build a video game story line for the player to enact or affect. The later is a bit easier, since the player can unknowingly become the writer. While building full compeling stories proceduraly can be both expensive and extremely tricky, it isn't necessary to let the computer build everything. The simple approche would be to simply automate everything that can be automated and leave the rest for someone to write.
+The building blocks of strories are actors, their actions, their motivations, events, locations, etc. The chalenge is to define them for a computer and the current goal is to build a video game story line for the player to enact or affect. The later is a bit easier, since the player can unknowingly become the writer. While building full compeling stories proceduraly can be both expensive and extremely tricky, it isn't necessary to let the computer build everything. The simple approche would be to simply automate everything that can be automated and leave the rest for someone to write.
+The *Narrative Engine* should be able to parse narrative structure files, be passed narrative objects, run basic operation on them and returns the result as narrative objects.
 
 
 The templates, which will provide specific interpretation of the data
@@ -26,7 +28,7 @@ To declare a new component, first indicate which component the new one inherit f
 
 `Component {type} [<{status| ...}|>]`
 
-To declare an instance of a component, first indicate the type of component followed byt the instance name and the desired status. The status is mandatory therefore it is good practice to setup default statuses when declaring component types.
+To declare an instance of a component, first indicate the type of component followed byt the instance name and the desired status. The status is mandatory therefore it is good practice to set up default statuses when declaring component types.
 
 `{type} {id} {status}`
 
@@ -56,7 +58,7 @@ Archetypes templates are used to define actors.
 ## Generator
 Generates all variables for the narrative engine. Uses various heuristic to output the most relevant variables to the current narrative. Generate the narrative structure by completing templates. Uses the IMS to make the narrative more compeling to the player.
 ## Interrest monitoring system
-Gather all relevant data from the player playstyle. Such as which NPCs is spoken to the more often, which area is more explored, etc. These informations can be used to asing weight to various components. The Generator will then be able to use it to further personalyse the player experience.
+Gather all relevant data from the player playstyle. Such as which NPCs is spoken to the more often, which area is more explored, etc. These informations can be used MayaCmdOverrideto asing weight to various components. The Generator will then be able to use it to further personalyse the player experience.
 # TODOs
 - [x] Create the basic language for declaring [compoents](#component).
 - [ ] Create a basic parser for reading and writing [component](#component) declarations.
@@ -66,18 +68,5 @@ Gather all relevant data from the player playstyle. Such as which NPCs is spoken
 # General C Notes
 * Always pass a pointer to a struct instead of the struct itself. This is because C always pass attribute as value. Even if the struct content isn't modified, this way we don't copy the whole struct content on the stack.
 * Be carefule of the scope. When returning a pointer, make sure not to return a pointer to a local value (function argument or locally declared variable). However returning a pointer to a dynamically allocated memory is fine, be careful however to free the memory once you're done with it *(migth be best to allocate the memory first and pass a pointer to it, so it's clear who allocated the memory in the fisrt place)* .
-# Table of contents
-- [General Notes](#general-notes)
-    - [Basic Data Structure](#basic-data-structure)
-        - [Component](#component)
-            - [Declaration](#declaration)
-        - [States](#states)
-        - [Actions](#actions)
-    - [Template](#template)
-        - [narrative](#narrative)
-        - [Archetype](#archetype)
-    - [Generator](#generator)
-    - [Interrest monitoring system](#interrest-monitoring-system)
-- [TODOs](#todos)
-- [General C Notes](#general-c-notes)
-- [Table of contents](#table-of-contents)
+* An array type is a special type that acts like a pointer, only new values cannot be reassinged. Unspecified size array as a parameter to a function is the same as a pointer, however it is used to emphasise how the variable will be used.
+* Pointer arithmetic: Pointer can be added and subtracted from one another since they are value and continuous memory location are just integer with steps of the size of the data they hold. They are added to integer multiplied by the size of the type they point to. Therefore, to iterate on an array, you can use `for(p=array;p<&array[ARRAYSIZE]; ++p)` where `&array[ARRAYSIZE]` return the pointer value of the last element in the array.
