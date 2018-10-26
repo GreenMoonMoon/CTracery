@@ -1,23 +1,24 @@
-#include <stdio.h>
 #include <errno.h>
+#include <stdlib.h>
 
 #include "tracery.h"
 
-struct TraceryParser *NewParser()
+typedef struct TraceryParser tracery;
+
+tracery *NewTracery()
 {
-    void *newParser = (struct TraceryParser *)malloc(sizeof(struct TraceryParser));
-    if (newParser == NULL)
+    // struct TraceryParser *newTracery = (struct TraceryParser *)malloc(sizeof(struct TraceryParser));
+    tracery *newTracery = malloc(sizeof(struct TraceryParser));
+    if (newTracery == NULL)
     {
         exit(-1);
     }
 
-    // newParser->Parse = FreeParser;
+    (*newTracery).Parse = ParseFunc;
+    (*newTracery).ParseTag = ParseTagFunc;
+    (*newTracery).Free = FreeTraceryFunc;
 
-    return newParser;
-}
-
-void FreeParser(struct TraceryParser *parser)
-{
+    return newTracery;
 }
 
 void ParseFunc(char *string)
@@ -25,5 +26,9 @@ void ParseFunc(char *string)
 }
 
 void ParseTagFunc(char *string)
+{
+}
+
+void FreeTraceryFunc(struct TraceryParser *parser)
 {
 }

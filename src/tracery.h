@@ -9,9 +9,13 @@ struct TraceryParser
     //last read token.
     void (*Parse)(char *string);
     void (*ParseTag)(char *string);
+    void (*Free)();
 };
 
-void Parse();
-struct TraceryParser *NewParser();
+struct TraceryParser *NewTracery();
+
+void FreeTraceryFunc(struct TraceryParser *parser);
+void ParseFunc(char *string);
+void ParseTagFunc(char *string);
 
 #endif
