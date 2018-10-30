@@ -20,15 +20,15 @@ int TestParse()
     // result = tracery->Parse(testInvalidRule3, &sectionCount);
     // _assertEqual(result, NULL);
 
-    result = tracery->Parse("#[]#[]##", &sectionCount);
-    _assertEqual(result, NULL);
+    // result = tracery->Parse("#[]#[]##", &sectionCount);
+    // _assertEqual(result, NULL);
 
-    // char *testValideRule1 = "#someSymbol# and #someOtherSymbol#";
-    // result = tracery->Parse(testValideRule1, &sectionCount);
-    // _assertEqual(sectionCount, 3);
-    // _assertEqual(&result[0], testValideRule1[0]);
-    // _assertEqual(&result[1], testValideRule1[0] + 12);
-    // _assertEqual(&result[2], testValideRule1[0] + 17);
+    char *testValideRule1 = "#someSymbol# and #someOtherSymbol#";
+    result = tracery->Parse(testValideRule1, &sectionCount);
+    _assertEqual(sectionCount, 3);
+    _assertEqual((char*)&result[0], &testValideRule1[0]);
+    _assertEqual((char*)&result[1], &testValideRule1[0] + 12);
+    _assertEqual((char*)&result[2], &testValideRule1[0] + 17);
 
     // result = tracery->Parse("#someOtherSymbol.cap.pluralize#", 31);
     // _assertEqual(result, 0);
