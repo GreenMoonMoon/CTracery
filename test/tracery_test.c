@@ -3,102 +3,62 @@
 #include "unittest.h"
 #include "../src/tracery.h"
 
-int TestGeneralParsing()
+int TestParse()
 {
-    struct TraceryParser *tracery = NewTracery();
-    tracery->Parse("");
-    tracery->Parse("fooo");
-    tracery->Parse("####");
-    tracery->Parse("#[]#[]##");
-    tracery->Parse("#someSymbol# and #someOtherSymbol#");
-    tracery->Parse("#someOtherSymbol.cap.pluralize#");
-    tracery->Parse("#[#do some things#]symbol.mod[someotherthings[and a function]]#");
-    tracery->Parse("#[fxn][fxn][fxn[subfxn]]symbol[[fxn]]#");
-    tracery->Parse("#[fxn][#fxn#][fxn[#subfxn#]]symbol[[fxn]]#");
-    tracery->Parse("#hero# ate some #color# #animal.s#");
+    Tracery *tracery = NewTracery();
+
+    tracery->Parse("", 0);
+    tracery->Parse("fooo", 4);
+    tracery->Parse("####", 4);
+    tracery->Parse("#[]#[]##", 8);
+    tracery->Parse("#someSymbol# and #someOtherSymbol#", 34);
+    tracery->Parse("#someOtherSymbol.cap.pluralize#", 31);
+    tracery->Parse("#[#do some things#]symbol.mod[someotherthings[and a function]]#", 63);
+    tracery->Parse("#[fxn][fxn][fxn[subfxn]]symbol[[fxn]]#", 38);
+    tracery->Parse("#[fxn][#fxn#][fxn[#subfxn#]]symbol[[fxn]]#", 42);
+    tracery->Parse("#hero# ate some #color# #animal.s#", 34);
+    tracery->Parse("#[#setPronouns#][#setOccupation#][hero:#name#]story#", 52);
+    tracery->Parse("#hero# ate some #color# #animal.s#", 34);
 
     // bad
-    tracery->Parse("#someSymbol# and #someOtherSymbol");
-    tracery->Parse("#[fxn][fxn][fxn[subfxn]]symbol[fxn]]#");
+    tracery->Parse("#someSymbol# and #someOtherSymbol", 33);
+    tracery->Parse("#[fxn][fxn][fxn[subfxn]]symbol[fxn]]#", 37);
+
+    FreeTracery(tracery);
+
+    return 0;
+}
+
+int TestParseTag()
+{
+    Tracery *tracery = NewTracery();
 
     // good
-    tracery->ParseTag("[action]symbol.mod1.mod2[postAction]");
+    tracery->ParseTag("[action]symbol.mod1.mod2[postAction]", 36);
 
     // bad
-    tracery->ParseTag("stuff[action]symbol.mod1.mod2[postAction]");
-    tracery->ParseTag("[action]symbol.mod1.mod2[postAction]stuff");
+    tracery->ParseTag("stuff[action]symbol.mod1.mod2[postAction]", 41);
+    tracery->ParseTag("[action]symbol.mod1.mod2[postAction]stuff", 41);
 
-    tracery->Parse("#[#setPronouns#][#setOccupation#][hero:#name#]story#");
-    tracery->Parse("#hero# ate some #color# #animal.s#");
-
-    /*
-    struct TraceryParser *tracery = NewParser();
-    (*tracery).Parse("");
-    (*tracery).Parse("fooo");
-    (*tracery).Parse("####");
-    (*tracery).Parse("#[]#[]##");
-    (*tracery).Parse("#someSymbol# and #someOtherSymbol#");
-    (*tracery).Parse("#someOtherSymbol.cap.pluralize#");
-    (*tracery).Parse("#[#do some things#]symbol.mod[someotherthings[and a function]]#");
-    (*tracery).Parse("#[fxn][fxn][fxn[subfxn]]symbol[[fxn]]#");
-    (*tracery).Parse("#[fxn][#fxn#][fxn[#subfxn#]]symbol[[fxn]]#");
-    (*tracery).Parse("#hero# ate some #color# #animal.s#");
-
-    // bad
-    (*tracery).Parse("#someSymbol# and #someOtherSymbol");
-    (*tracery).Parse("#[fxn][fxn][fxn[subfxn]]symbol[fxn]]#");
-
-    // good
-    (*tracery).ParseTag("[action]symbol.mod1.mod2[postAction]");
-
-    // bad
-    (*tracery).ParseTag("stuff[action]symbol.mod1.mod2[postAction]");
-    (*tracery).ParseTag("[action]symbol.mod1.mod2[postAction]stuff");
-
-    (*tracery).Parse("#[#setPronouns#][#setOccupation#][hero:#name#]story#");
-    (*tracery).Parse("#hero# ate some #color# #animal.s#");
-    */
-
-    /*
-    Parse("");
-    Parse("fooo");
-    Parse("####");
-    Parse("#[]#[]##");
-    Parse("#someSymbol# and #someOtherSymbol#");
-    Parse("#someOtherSymbol.cap.pluralize#");
-    Parse("#[#do some things#]symbol.mod[someotherthings[and a function]]#");
-    Parse("#[fxn][fxn][fxn[subfxn]]symbol[[fxn]]#");
-    Parse("#[fxn][#fxn#][fxn[#subfxn#]]symbol[[fxn]]#");
-    Parse("#hero# ate some #color# #animal.s#");
-
-    // bad
-    Parse("#someSymbol# and #someOtherSymbol");
-    Parse("#[fxn][fxn][fxn[subfxn]]symbol[fxn]]#");
-
-    // good
-    ParseTag("[action]symbol.mod1.mod2[postAction]");
-
-    // bad(.text+0x20): undefined reference to `main'
-    ParseTag("stuff[action]symbol.mod1.mod2[postAction]");
-    ParseTag("[action]symbol.mod1.mod2[postAction]stuff");
-
-    Parse("#[#setPronouns#][#setOccupation#][hero:#name#]story#");
-    Parse("#hero# ate some #color# #animal.s#");
-    */
-
-    tracery->Free();
+    FreeTracery(tracery);
 
     return 0;
 }
 
 int TestGrammar()
 {
+    Grammar *grammar = NewGrammar();
+
+    FreeGrammar(grammar);
+
     return 0;
 }
 
 int all_tests()
 {
-    _verify(TestGeneralParsing);
+    _verify(TestParse);
+    _verify(TestParseTag);
+    _verify(TestGrammar);
 
     return 0;
 }

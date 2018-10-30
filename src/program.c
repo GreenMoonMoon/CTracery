@@ -1,28 +1,26 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-// #include "tracery.h"
+typedef struct Destroyable
+{
+    void (*Destroy)();
+} Destroyable;
 
-int *ReturnPointer();
+typedef struct A
+{
+    int *valueA;
+} A;
+
+typedef struct B
+{
+    int *valueB;
+} B;
 
 int main(void)
 {
-    // Grammar *grammar = NewGrammar();
-    // LoadGrammar(grammar, "../data/sci_fi.gram");
-
-    int *t = ReturnPointer();
-    printf("%d\n", (int)t);
+    A a = {.valueA = 0};
+    printf("%d\n", (int)a.valueA);
+    printf("%d\n", (int)&(a.valueA));
 
     return 0;
-}
-
-int *ReturnPointer()
-{
-    int *p = (int*)malloc(sizeof(int));
-    if(p == NULL){
-        exit(-1);
-    }
-    printf("%d\n", (int)p);
-
-    return p;
 }
