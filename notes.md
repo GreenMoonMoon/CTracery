@@ -75,3 +75,4 @@ Gather all relevant data from the player playstyle. Such as which NPCs is spoken
 * Make sure to create recursive free functions for your structs, free is not recursive or intelligent. **Pointers** inside struct can stay allocated but inaccessible du to the struct pointer being freed, this results in a memory leek.
 * Always initialize pointers eithers by allocating them or setting them as `NULL` (delayed allocation).
 * Use enum of types and add them as a variable to struct to provide runtime type information.
+* When working with string. If you want a string variable that can be rewriten, use malloc. Otherwise, it's a segmentation fault.

@@ -39,7 +39,7 @@ typedef struct Tracery
     //TODO: check if such container is actually usefull, it might be better
     //to leave all the function in the open with meaningfull name to avoid
     //collision.
-    void (*Parse)(char *string, int stringSize);
+    char **(*Parse)(char *string, int *sectionCount);
     void (*ParseTag)(char *string, int stringSize);
     void (*Destroy)();
 } Tracery;
@@ -48,7 +48,7 @@ Tracery *NewTracery();
 static void DestroyTraceryFunc(Tracery *tracery);
 void FreeTracery(Tracery *tracery);
 
-void ParseFunc(char *string, int stringSize);
+char **ParseFunc(char *string, int *sectionCount);
 void ParseTagFunc(char *string, int stringSize);
 
 Grammar *NewGrammar();

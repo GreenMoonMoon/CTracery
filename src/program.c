@@ -1,26 +1,20 @@
 #include <stdlib.h>
 #include <stdio.h>
-
-typedef struct Destroyable
-{
-    void (*Destroy)();
-} Destroyable;
-
-typedef struct A
-{
-    int *valueA;
-} A;
-
-typedef struct B
-{
-    int *valueB;
-} B;
+#include <string.h>
 
 int main(void)
-{
-    A a = {.valueA = 0};
-    printf("%d\n", (int)a.valueA);
-    printf("%d\n", (int)&(a.valueA));
+{   
+    char *testString = "fooo";
+    
+    printf("testString: %s\n", testString);
+    printf("testString[0]: %c\n", testString[0]);
+    printf("&testString[0]: %p\n", &testString[0]);
+    printf("sizeof(testString): %d\n", strlen(testString));
+
+    char *testSubsection[1] = {testString};
+    printf("testSubsection[0]: %s\n", testSubsection[0]);
+    printf("testSubsection[0][0]: %c\n", testSubsection[0][0]);
+    printf("&testSubsection[0][0]: %p\n", &testSubsection[0][0]);
 
     return 0;
 }

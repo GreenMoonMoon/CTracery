@@ -6,23 +6,58 @@
 int TestParse()
 {
     Tracery *tracery = NewTracery();
+    int sectionCount = NULL;
 
-    tracery->Parse("", 0);
-    tracery->Parse("fooo", 4);
-    tracery->Parse("####", 4);
-    tracery->Parse("#[]#[]##", 8);
-    tracery->Parse("#someSymbol# and #someOtherSymbol#", 34);
-    tracery->Parse("#someOtherSymbol.cap.pluralize#", 31);
-    tracery->Parse("#[#do some things#]symbol.mod[someotherthings[and a function]]#", 63);
-    tracery->Parse("#[fxn][fxn][fxn[subfxn]]symbol[[fxn]]#", 38);
-    tracery->Parse("#[fxn][#fxn#][fxn[#subfxn#]]symbol[[fxn]]#", 42);
-    tracery->Parse("#hero# ate some #color# #animal.s#", 34);
-    tracery->Parse("#[#setPronouns#][#setOccupation#][hero:#name#]story#", 52);
-    tracery->Parse("#hero# ate some #color# #animal.s#", 34);
+    char *testInvalidRule1 = "";
+    char **result = tracery->Parse(testInvalidRule1, &sectionCount);
+    _assertEqual(sectionCount, 0);
 
-    // bad
-    tracery->Parse("#someSymbol# and #someOtherSymbol", 33);
-    tracery->Parse("#[fxn][fxn][fxn[subfxn]]symbol[fxn]]#", 37);
+    char *testInvalidRule2 = "fooo";
+    result = tracery->Parse(testInvalidRule2, &sectionCount);
+    _assertEqual(sectionCount, 0);
+
+    // char *testInvalidRule3 = "####";
+    // result = tracery->Parse(testInvalidRule3, &sectionCount);
+    // _assertEqual(result, NULL);
+
+    result = tracery->Parse("#[]#[]##", &sectionCount);
+    _assertEqual(result, NULL);
+
+    // char *testValideRule1 = "#someSymbol# and #someOtherSymbol#";
+    // result = tracery->Parse(testValideRule1, &sectionCount);
+    // _assertEqual(sectionCount, 3);
+    // _assertEqual(&result[0], testValideRule1[0]);
+    // _assertEqual(&result[1], testValideRule1[0] + 12);
+    // _assertEqual(&result[2], testValideRule1[0] + 17);
+
+    // result = tracery->Parse("#someOtherSymbol.cap.pluralize#", 31);
+    // _assertEqual(result, 0);
+
+    // result = tracery->Parse("#[#do some things#]symbol.mod[someotherthings[and a function]]#", 63);
+    // _assertEqual(result, 0);
+
+    // result = tracery->Parse("#[fxn][fxn][fxn[subfxn]]symbol[[fxn]]#", 38);
+    // _assertEqual(result, 0);
+
+    // result = tracery->Parse("#[fxn][#fxn#][fxn[#subfxn#]]symbol[[fxn]]#", 42);
+    // _assertEqual(result, 0);
+
+    // result = tracery->Parse("#hero# ate some #color# #animal.s#", 34);
+    // _assertEqual(result, 0);
+
+    // result = tracery->Parse("#[#setPronouns#][#setOccupation#][hero:#name#]story#", 52);
+    // _assertEqual(result, 0);
+
+    // result = tracery->Parse("#hero# ate some #color# #animal.s#", 34);
+    // _assertEqual(result, 0);
+
+
+    // // bad
+    // result = tracery->Parse("#someSymbol# and #someOtherSymbol", 33);
+    // _assertEqual(!result, 0);
+
+    // result = tracery->Parse("#[fxn][fxn][fxn[subfxn]]symbol[fxn]]#", 37);
+    // _assertEqual(!result, 0);
 
     FreeTracery(tracery);
 
