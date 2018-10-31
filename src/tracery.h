@@ -47,7 +47,7 @@
 // void ParseSymbolFunc(char *string, int stringSize);
 
 typedef struct Grammar
-{   
+{
     int selected;
 } Grammar;
 
@@ -59,9 +59,11 @@ typedef struct Trace
 Grammar *CreateGrammar();
 void FreeGrammar(Grammar *grammar);
 
-Trace *CreateTrace(Grammar *grammar);
+Trace *CreateTrace(Grammar *grammar); //Create Trace from "origin" symbol
+Trace *CreateTraceFromSymbol(Grammar *grammar);
+char *CreateFlattened(Grammar *grammar);
 void FreeTrace(Trace *trace);
-static void ExpandTrace(Trace *trace);
-static void FlattenTrace(Trace *trace);
+void ExpandTrace(Trace *trace);
+char *FlattenTrace(Trace *trace);
 
 #endif

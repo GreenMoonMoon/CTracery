@@ -88,6 +88,14 @@ Trace *CreateTrace(Grammar *grammar)
     return newTrace;
 }
 
+char *CreateFlattened(Grammar *grammar)
+{
+    Trace *trace = CreateTrace(grammar);
+    char *flattened = FlattenTrace(trace);
+    FreeTrace(trace);
+    return flattened;
+}
+
 void FreeTrace(Trace *trace)
 {
     //free innards of trace ...
@@ -98,6 +106,7 @@ void ExpandTrace(Trace *trace)
 {
 }
 
-void FlattenTrace(Trace *trace)
+char *FlattenTrace(Trace *trace)
 {
+    return "";
 }

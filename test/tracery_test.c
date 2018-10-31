@@ -38,11 +38,20 @@ int TestTrace()
     //create rules ...
     Trace *trace = CreateTrace(grammar);
     ExpandTrace(trace);
-    FlattenTrace(trace);
+    char *flattened = FlattenTrace(trace);
 
     FreeGrammar(grammar);
 
     return 0;
+}
+
+int TestCreateFlattened()
+{
+    Grammar *grammar = CreateGrammar();
+    //create rules ...
+    char *flattened = CreateFlattened(grammar);
+
+    FreeGrammar(grammar);
 }
 
 int all_tests()
@@ -51,6 +60,7 @@ int all_tests()
     // _verify(TestParseSymbol);
     _verify(TestGrammar);
     _verify(TestTrace);
+    _verify(TestCreateFlattened);
 
     return 0;
 }
