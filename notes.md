@@ -18,6 +18,17 @@ These templates are bound by the context, if the context does not permit a templ
 The game would use the template to align objects into their next states or to drive the simulation. Then depending on how frequently the game state is analysed
 another temlate is applied to the current state. All previous actions are recorded, player wise or game wise as they can serve as pseudo-context or context for the next templates.
 Stories can generaly be decomposed in multiple arc that follow similar pattern. With a handful of these pattern we can build compelling narrative easily. The second element are the actors and their motivation. Character psyche can be hard to write, harder still to generate with a computer but it can be helped by archetype templates. Motivations and goals can be picked up from enviroments, events or player actions. Archetypes can also help define behavior and descisions process of actors. Events caused by actors or the environments are what makes the narrative move foward.
+### The way stories are constructed
+Stories are constructed as a _chain_ of action > reaction or ***events***. The chain is constructed first and then the reader, viewer or player will move down the chain and experience the events in a linear or semi-linear fashion.
+In the context of a passive media such as books or movies, it makes sense. The audiences does not have any control on the story, it's a mere recollection of events. It is the same with ***Let's play*** videos. However in a video game, the player have or should have agency on his or her actions. Often this agency is left to some part of the gameplay experience while crucial event are done trought cut-scenes or scripted event, overall reducing the impact of interactivity. We can look at books or movies as tree of possibilities that have been collapsed by the author who plays the role of both the developper and the player.
+
+Let's consider a game where the story is a collection of events that aren't linked by time. They can occure in at any moment and in any order. However these events have requirements that needs to be met in order for the event to occure.
+Both the player and events can alter the world state, filling requirements for more events to occurs. NPCs quests, overarching story and bonus side-quests can be seen as stacks of template representing possible events, with requirements and effects.
+As the player progress trought the game, sets in motion events and follow his or her own story.
+Story can have a strictly possitive progression, where events and actions changed until they fill specific requirement and then makes the whole story progress. Or they can have negative and positive progressions, where event and the player can unset requirements, thus moving in the story has they please.
+
+Stacked templates create complex behavior by creating event based on current world state. Story are a linear reconstruction of events that did not exists in a linear state before happening. Templates are guides, world state can be influenced or not by them.
+
 ## Basic Data Structure
 Hold all narrative relevant data. Can be manipulated and used to actualyze the story within the game. This structure does not have any logic, it is mainly a tool to represent narrative structure within the game.
 One key feature of this data structure will be to handle a growing list of componenet and their possible status.

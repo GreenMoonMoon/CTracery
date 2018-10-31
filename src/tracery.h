@@ -3,56 +3,65 @@
 #ifndef __TRACERY__
 #define __TRACERY__
 
-struct Action
-{
-    int selected;
-};
+// struct Action
+// {
+//     int selected;
+// };
 
-struct Symbol
-{
-    int selected;
-};
+// struct Symbol
+// {
+//     int selected;
+// };
 
-struct Modifier
-{
-    int selected;
-};
+// struct Modifier
+// {
+//     int selected;
+// };
+
+// typedef struct TraceryOBJ
+// {
+//     struct Action *preActions;
+//     struct Action *postActions;
+//     struct Symbol *symbols;
+//     struct Modifier *mods;
+// } TraceryOBJ;
+
+// typedef struct Tracery
+// {
+//     //General struct used to access Tracery specific functions.
+//     //TODO: check if such container is actually usefull, it might be better
+//     //to leave all the function in the open with meaningfull name to avoid
+//     //collision.
+//     char **(*Parse)(char *string, int *sectionCount);
+//     // void (*ParseTag)(char *string, int stringSize);
+//     void (*ParseSymbol)(char *string, int stringSize);
+//     void (*Destroy)();
+// } Tracery;
+
+// Tracery *NewTracery();
+// static void DestroyTraceryFunc(Tracery *tracery);
+// void FreeTracery(Tracery *tracery);
+
+// char **ParseFunc(char *string, int *sectionCount);
+// // void ParseTagFunc(char *string, int stringSize);
+// void ParseSymbolFunc(char *string, int stringSize);
 
 typedef struct Grammar
-{
-    // Container for symbol and modifiers.
+{   
     int selected;
-    void (*Destroy)();
 } Grammar;
 
-typedef struct TraceryOBJ
+typedef struct Trace
 {
-    struct Action *preActions;
-    struct Action *postActions;
-    struct Symbol *symbols;
-    struct Modifier *mods;
-} TraceryOBJ;
+    int selected;
+} Trace;
 
-typedef struct Tracery
-{
-    //General struct used to access Tracery specific functions.
-    //TODO: check if such container is actually usefull, it might be better
-    //to leave all the function in the open with meaningfull name to avoid
-    //collision.
-    char **(*Parse)(char *string, int *sectionCount);
-    void (*ParseTag)(char *string, int stringSize);
-    void (*Destroy)();
-} Tracery;
-
-Tracery *NewTracery();
-static void DestroyTraceryFunc(Tracery *tracery);
-void FreeTracery(Tracery *tracery);
-
-char **ParseFunc(char *string, int *sectionCount);
-void ParseTagFunc(char *string, int stringSize);
-
-Grammar *NewGrammar();
-static void DestroyGrammarFunc(Grammar *grammar);
+Grammar *CreateGrammar();
 void FreeGrammar(Grammar *grammar);
+
+Trace *CreateTrace(Grammar *grammar);
+void FreeTrace(Trace *trace);
+static void ExpandTrace(Trace *trace);
+static void FlattenTrace(Trace *trace);
 
 #endif
