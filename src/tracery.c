@@ -70,6 +70,10 @@ Grammar *CreateGrammar()
     if (newGrammar == NULL)
         exit(-1);
 
+    newGrammar->capacity = 0;
+    newGrammar->count = 0;
+    newGrammar->symbols = NULL;
+
     return newGrammar;
 }
 
@@ -81,6 +85,7 @@ void FreeGrammar(Grammar *grammar)
 
 Trace *CreateTrace(Grammar *grammar)
 {
+    //Create a trace from 'origin' symbol
     Trace *newTrace = malloc(sizeof(Trace));
     if (newTrace == NULL)
         exit(-1);
@@ -88,12 +93,49 @@ Trace *CreateTrace(Grammar *grammar)
     return newTrace;
 }
 
-char *CreateFlattened(Grammar *grammar)
+Trace *CreateTraceFromSymbol(Grammar *grammar, Symbol *symbol)
+{
+    Trace *newTrace = malloc(sizeof(Trace));
+    if (newTrace == NULL)
+        exit(-1);
+
+    return newTrace;
+}
+
+char *CreateFlattenedTrace(Grammar *grammar)
 {
     Trace *trace = CreateTrace(grammar);
     char *flattened = FlattenTrace(trace);
     FreeTrace(trace);
     return flattened;
+}
+
+void AddSymbolToGrammar(Grammar *grammar, char *symbolName)
+{
+    //look into http://www.craftinginterpreters.com/chunks-of-bytecode.html fro
+    //a better implementation of a dynamic array, with some neat syntactic sugar
+    if (grammar->count == grammar->capacity)
+    {
+        grammar->capacity = GROW_CAPACITY(grammar->capacity);
+        grammar->symbols = GROW_ARRAY(grammar->symbols, Symbol, grammar->capacity);
+    }
+
+    grammar->symbols[grammar->count] = (Symbol){.name = symbolName};
+    grammar->count++;
+}
+
+Symbol *GetSymbolFromGrammar(Grammar *grammar, char *symbolName)
+{
+    //This is quite linear: O(n) type of search.
+    //Using a hash table migth save more time but will require change to
+    //the structure.
+    int i;
+    for (i = 0; i < grammar->count; i++)
+    {
+        if (grammar->symbols[i].name == symbolName)
+            return grammar->symbols;
+    }
+    return NULL;
 }
 
 void FreeTrace(Trace *trace)
@@ -109,4 +151,15 @@ void ExpandTrace(Trace *trace)
 char *FlattenTrace(Trace *trace)
 {
     return "";
+}
+
+void *reallocate(void *previous, size_t capacity)
+{
+    if (capacity == 0)
+    {
+        free(previous);
+        return NULL;
+    }
+
+    return realloc(previous, capacity);
 }

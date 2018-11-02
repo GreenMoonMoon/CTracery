@@ -2,18 +2,60 @@
 #include <stdio.h>
 #include <string.h>
 
-void changeValue(int *p);
+typedef struct dynarray
+{
+    char **array;
+    int count;
+    int capacity;
+} dynarray;
+
+dynarray *NewDynarray(int capacity)
+{
+    dynarray *d = malloc(sizeof(dynarray));
+    (*d).array = malloc(capacity * sizeof(char *));
+    (*d).count = 0;
+    (*d).capacity = capacity;
+
+    return d;
+}
+
+void AppendDynarray(dynarray *d, char *value)
+{
+    if (d->count == d->capacity)
+    {
+        d-> capacity *= 2;
+        d->array = realloc(d->array, d->capacity * sizeof(char *));
+    }
+    d->array[d->count++] = value;
+}
+
+void FreeDynarray(dynarray *d)
+{
+    free((*d).array);
+    free(d);
+}
 
 int main(void)
 {
-    int s = 3;
-    printf("s: %d\n", s);
-    changeValue(&s);
-    printf("s: %d\n", s);
-    return 0;
-}
+    char *text = "this is a phrase with 7 elements";
+    dynarray *d = NewDynarray(5);
 
-void changeValue(int *p)
-{
-    *p = 10;
+    AppendDynarray(d, &text[0]);
+    AppendDynarray(d, &text[5]);
+    AppendDynarray(d, &text[8]);
+    AppendDynarray(d, &text[10]);
+    AppendDynarray(d, &text[17]);
+    AppendDynarray(d, &text[22]);
+    AppendDynarray(d, &text[24]);
+
+    printf("%c\n", *d->array[0]);
+    printf("%c\n", *d->array[1]);
+    printf("%c\n", *d->array[2]);
+    printf("%c\n", *d->array[3]);
+    printf("%c\n", *d->array[4]);
+    printf("%c\n", *d->array[5]);
+    printf("%c\n", *d->array[6]);
+
+    FreeDynarray(d);
+    return 0;
 }

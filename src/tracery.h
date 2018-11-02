@@ -3,6 +3,8 @@
 #ifndef __TRACERY__
 #define __TRACERY__
 
+#include "utils.h"
+
 // struct Action
 // {
 //     int selected;
@@ -32,7 +34,7 @@
 //     //TODO: check if such container is actually usefull, it might be better
 //     //to leave all the function in the open with meaningfull name to avoid
 //     //collision.
-//     char **(*Parse)(char *string, int *sectionCount);
+//     char **(*Parse)(char *string, int *coun);
 //     // void (*ParseTag)(char *string, int stringSize);
 //     void (*ParseSymbol)(char *string, int stringSize);
 //     void (*Destroy)();
@@ -42,28 +44,43 @@
 // static void DestroyTraceryFunc(Tracery *tracery);
 // void FreeTracery(Tracery *tracery);
 
-// char **ParseFunc(char *string, int *sectionCount);
+// char **ParseFunc(char *string, int *coun);
 // // void ParseTagFunc(char *string, int stringSize);
 // void ParseSymbolFunc(char *string, int stringSize);
 
-typedef struct Grammar
+typedef struct Symbol
 {
-    int selected;
-} Grammar;
+    char *name;
+} Symbol;
 
 typedef struct Trace
 {
-    int selected;
+    int placeholder;
 } Trace;
+
+typedef struct Grammar
+{
+    /*The symbols are first allocated in the Grammar struct, then their
+    pointer is passed to the */
+    Symbol *symbols;
+    int count;
+    int capacity;
+} Grammar;
 
 Grammar *CreateGrammar();
 void FreeGrammar(Grammar *grammar);
 
 Trace *CreateTrace(Grammar *grammar); //Create Trace from "origin" symbol
-Trace *CreateTraceFromSymbol(Grammar *grammar);
-char *CreateFlattened(Grammar *grammar);
+Trace *CreateTraceFromSymbol(Grammar *grammar, Symbol *symbol);
+char *CreateFlattenedTrace(Grammar *grammar);
+void AddSymbolToGrammar(Grammar *grammar, char *symbolName);
+Symbol *GetSymbolFromGrammar(Grammar *grammar, char *symbolName);
+
+
 void FreeTrace(Trace *trace);
 void ExpandTrace(Trace *trace);
 char *FlattenTrace(Trace *trace);
+
+Symbol *LoadSymbolFromString(char* symbolStr);
 
 #endif

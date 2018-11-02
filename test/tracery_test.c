@@ -35,11 +35,33 @@ int TestGrammar()
 int TestTrace()
 {
     Grammar *grammar = CreateGrammar();
+    
+    // "origin:[\"test phrase\"]"
+    char *symbolName = "origin";
+    AddSymbolToGrammar(grammar, symbolName);
+    _assert(grammar->symbols);
+    Symbol *symbol = GetSymbolFromGrammar(grammar, symbolName);
+    _assertEqualValue(symbol->name, "origin");
+
+    Trace *trace = CreateTrace(grammar);
+    ExpandTrace(trace);
+    char *flattened = FlattenTrace(trace);
+
+    FreeTrace(trace);
+    FreeGrammar(grammar);
+
+    return 0;
+}
+
+int TestTraceFromSymbol()
+{
+    Grammar *grammar = CreateGrammar();
     //create rules ...
     Trace *trace = CreateTrace(grammar);
     ExpandTrace(trace);
     char *flattened = FlattenTrace(trace);
 
+    FreeTrace(trace);
     FreeGrammar(grammar);
 
     return 0;
@@ -49,9 +71,11 @@ int TestCreateFlattened()
 {
     Grammar *grammar = CreateGrammar();
     //create rules ...
-    char *flattened = CreateFlattened(grammar);
+    char *flattened = CreateFlattenedTrace(grammar);
 
     FreeGrammar(grammar);
+
+    return 0;
 }
 
 int all_tests()
@@ -60,6 +84,7 @@ int all_tests()
     // _verify(TestParseSymbol);
     _verify(TestGrammar);
     _verify(TestTrace);
+    _verify(TestTraceFromSymbol);
     _verify(TestCreateFlattened);
 
     return 0;
