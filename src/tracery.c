@@ -79,7 +79,10 @@ Grammar *CreateGrammar()
 
 void FreeGrammar(Grammar *grammar)
 {
-    //free innards of grammar ...
+    //Make sure to free any structure within grammar.
+    int i;
+    for(i = 0; i < grammar->count; i++)
+        FreeSymbol(&grammar->symbols[i]);
     free(grammar);
 }
 
@@ -112,8 +115,7 @@ char *CreateFlattenedTrace(Grammar *grammar)
 
 void AddSymbolToGrammar(Grammar *grammar, char *symbolName)
 {
-    //look into http://www.craftinginterpreters.com/chunks-of-bytecode.html fro
-    //a better implementation of a dynamic array, with some neat syntactic sugar
+    //implemented using http://www.craftinginterpreters.com/chunks-of-bytecode.html
     if (grammar->count == grammar->capacity)
     {
         grammar->capacity = GROW_CAPACITY(grammar->capacity);
@@ -135,6 +137,18 @@ Symbol *GetSymbolFromGrammar(Grammar *grammar, char *symbolName)
         if (grammar->symbols[i].name == symbolName)
             return grammar->symbols;
     }
+    return NULL;
+}
+
+void PushRuleToGrammar(Grammar *grammar, char *symbolName, char **rules)
+{
+    Symbol *symbol = GetSymbolFromGrammar(grammar, symbolName);
+    if (symbol != NULL)
+        symbol->rules = rules;
+}
+
+char **PopRuleFromGrammar(Grammar *grammar, char *symbolName)
+{
     return NULL;
 }
 
@@ -162,4 +176,12 @@ void *reallocate(void *previous, size_t capacity)
     }
 
     return realloc(previous, capacity);
+}
+
+void FreeSymbol(Symbol *symbol)
+{
+    int i;
+    for(i=0; i< symbol->ruleCount; i++)
+        free(symbol->rules[i]);
+    free(symbol);
 }
