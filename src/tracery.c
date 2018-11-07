@@ -149,6 +149,12 @@ void PushRuleToGrammar(Grammar *grammar, char *symbolName, char **rules)
 
 char **PopRuleFromGrammar(Grammar *grammar, char *symbolName)
 {
+    int i;
+    for(i =0; i < grammar->count; i++)
+    {
+        if(grammar->symbols[i].name == symbolName)
+            return grammar->symbols[i].rules;
+    }
     return NULL;
 }
 
@@ -167,6 +173,14 @@ char *FlattenTrace(Trace *trace)
     return "";
 }
 
+void FreeSymbol(Symbol *symbol)
+{
+    int i;
+    for(i=0; i< symbol->ruleCount; i++)
+        free(symbol->rules[i]);
+    free(symbol);
+}
+
 void *reallocate(void *previous, size_t capacity)
 {
     if (capacity == 0)
@@ -176,12 +190,4 @@ void *reallocate(void *previous, size_t capacity)
     }
 
     return realloc(previous, capacity);
-}
-
-void FreeSymbol(Symbol *symbol)
-{
-    int i;
-    for(i=0; i< symbol->ruleCount; i++)
-        free(symbol->rules[i]);
-    free(symbol);
 }

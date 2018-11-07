@@ -42,5 +42,6 @@ void ExpandTrace(Trace *trace);
 char *FlattenTrace(Trace *trace);
 
 Symbol *LoadSymbolFromString(char* symbolStr);
+void FreeSymbol(Symbol *symbol);
 
 #endif
