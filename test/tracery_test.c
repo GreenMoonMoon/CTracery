@@ -117,6 +117,18 @@ int TestCreateFlattened()
     return 0;
 }
 
+int TestReadGrammarFile()
+{
+    //setup the test by creating a temp file
+    const char *filepath;
+    char *grammarRaw = ReadGrammarFile(filepath);   
+    
+    free(grammarRaw);
+    //tear down the test by deleting the temp file
+
+    return 0;
+}
+
 int all_tests()
 {
     // _verify(TestParse);
@@ -125,6 +137,7 @@ int all_tests()
     _verify(TestTrace);
     _verify(TestTraceFromSymbol);
     _verify(TestCreateFlattened);
+    _verify(TestReadGrammarFile);
 
     return 0;
 }

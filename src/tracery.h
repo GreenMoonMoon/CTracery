@@ -34,14 +34,16 @@ Trace *CreateTraceFromSymbol(Grammar *grammar, Symbol *symbol);
 char *CreateFlattenedTrace(Grammar *grammar);
 void AddSymbolToGrammar(Grammar *grammar, char *symbolName);
 Symbol *GetSymbolFromGrammar(Grammar *grammar, char *symbolName);
-void PushRuleToGrammar(Grammar *grammar, char *symbolName, char **rules);
-char **PopRuleFromGrammar(Grammar *grammar, char *symbolName);
+void PushRulesToGrammar(Grammar *grammar, char *symbolName, char **rules);
+char **PopRulesFromGrammar(Grammar *grammar, char *symbolName);
+char *GetRuleFromGrammar(Grammar *grammar, char *symbolName);
 
 void FreeTrace(Trace *trace);
 void ExpandTrace(Trace *trace);
 char *FlattenTrace(Trace *trace);
 
-Symbol *LoadSymbolFromString(char* symbolStr);
+Symbol *LoadSymbolFromString(char *symbolStr);
 void FreeSymbol(Symbol *symbol);
+char *GetRuleFromSymbol(Symbol *symbol);
 
 #endif
