@@ -21,10 +21,10 @@ int TestParse()
         "#hero# ate some #color# #animal.s#",
         "#someSymbol# and #someOtherSymbol",
         "#[fxn][fxn][fxn[subfxn]]symbol[fxn]]#"};
-        
-        // "[action]symbol.mod1.mod2[postAction]",
-        // "stuff[action]symbol.mod1.mod2[postAction]",
-        // "[action]symbol.mod1.mod2[postAction]stuff"};
+
+    // "[action]symbol.mod1.mod2[postAction]",
+    // "stuff[action]symbol.mod1.mod2[postAction]",
+    // "[action]symbol.mod1.mod2[postAction]stuff"};
 
     Grammar *grammar = CreateGrammar();
     int i;
@@ -57,14 +57,13 @@ int TestRules()
 
     char *symbolName = "origin";
     AddSymbolToGrammar(grammar, symbolName);
-    //Symbol *symbol = GetSymbolFromGrammar(grammar, symbolName);
-    
 
-    char *rules[1] = {"test phrase"};
-    PushRuleToGrammar(grammar, symbolName, rules);
+    Token tokens[2] = {{TEXT}, {TEXT}};
+    Rule rules[1] = {{.tokens = &tokens[0]}};
+    PushRulesToGrammar(grammar, symbolName, rules, 1);
 
-    char **popedRules = PopRuleFromGrammar(grammar, symbolName);
-    _assert(popedRules);
+    // Rule *popedRules = PopRulesFromGrammar(grammar, symbolName);
+    // _assert(popedRules);
 
     FreeGrammar(grammar);
 
@@ -117,15 +116,25 @@ int TestCreateFlattened()
     return 0;
 }
 
-int TestReadGrammarFile()
-{
-    //setup the test by creating a temp file
-    const char *filepath;
-    char *grammarRaw = ReadGrammarFile(filepath);   
-    
-    free(grammarRaw);
-    //tear down the test by deleting the temp file
+// int TestReadGrammarFile()
+// {
+//     //setup the test by creating a temp file
+//     const char *filepath;
+//     char *grammarRaw = ReadGrammarFile(filepath);
 
+//     free(grammarRaw);
+//     //tear down the test by deleting the temp file
+
+//     return 0;
+// }
+
+int TestExpandGrammar()
+{
+    return 0;
+}
+
+int TestFlattenGrammar()
+{
     return 0;
 }
 
@@ -134,10 +143,12 @@ int all_tests()
     // _verify(TestParse);
     _verify(TestGrammar);
     _verify(TestRules);
-    _verify(TestTrace);
-    _verify(TestTraceFromSymbol);
-    _verify(TestCreateFlattened);
-    _verify(TestReadGrammarFile);
+    // _verify(TestTrace);
+    // _verify(TestTraceFromSymbol);
+    // _verify(TestCreateFlattened);
+    // _verify(TestReadGrammarFile);
+    // _verify(TestExpandGrammar);
+    // _verify(TestFlattenGrammar);
 
     return 0;
 }

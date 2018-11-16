@@ -62,7 +62,7 @@ void AddSymbolToGrammar(Grammar *grammar, char *symbolName)
         grammar->symbols = GROW_ARRAY(grammar->symbols, Symbol, grammar->capacity);
     }
 
-    grammar->symbols[grammar->count] = (Symbol){.name = symbolName};
+    grammar->symbols[grammar->count] = (Symbol){.name = symbolName, .rules = NULL, .count = 0};
     grammar->count++;
 }
 
@@ -80,14 +80,15 @@ Symbol *GetSymbolFromGrammar(Grammar *grammar, char *symbolName)
     return NULL;
 }
 
-void PushRulesToGrammar(Grammar *grammar, char *symbolName, char **rules)
+void PushRulesToGrammar(Grammar *grammar, char *symbolName, Rule *rules, int rulesCount)
 {
     Symbol *symbol = GetSymbolFromGrammar(grammar, symbolName);
     if (symbol != NULL)
         symbol->rules = rules;
+    symbol->count = rulesCount;
 }
 
-char **PopRulesFromGrammar(Grammar *grammar, char *symbolName)
+Rule *PopRulesFromGrammar(Grammar *grammar, char *symbolName)
 {
     Symbol *symbol = GetSymbolFromGrammar(grammar, symbolName);
     if (symbol != NULL)
@@ -95,13 +96,13 @@ char **PopRulesFromGrammar(Grammar *grammar, char *symbolName)
     return NULL;
 }
 
-char *GetRuleFromGrammar(Grammar *grammar, char *symbolName)
+Rule *GetRuleFromGrammar(Grammar *grammar, char *symbolName)
 {
     Symbol *symbol = GetSymbolFromGrammar(grammar, symbolName);
     if (symbol == NULL)
         return NULL;
 
-    char *rule = GetRuleFromSymbol(symbol);
+    Rule *rule = GetRuleFromSymbol(symbol);
     if (rule == NULL)
         return NULL;
 
@@ -125,14 +126,15 @@ char *FlattenTrace(Trace *trace)
 
 void FreeSymbol(Symbol *symbol)
 {
-    int i;
-    for (i = 0; i < symbol->ruleCount; i++)
-        free(symbol->rules[i]);
+    //FIXME: memory leak, the rules and tokens array are not freed
+    printf("WARNING: FreeSymbol() is not complete and will cause memory leak!\n");
     free(symbol);
 }
 
-char *GetRuleFromSymbol(Symbol *symbol)
+Rule *GetRuleFromSymbol(Symbol *symbol)
 {
+    if (symbol->count > 0)
+        return &symbol->rules[0];
     return NULL;
 }
 
@@ -157,7 +159,7 @@ char *ReadGrammarFile(const char *filepath)
     fseek(stream, 0, SEEK_SET);
 
     char *grammarRaw = malloc(fileSize + 1);
-    if(grammarRaw == NULL)
+    if (grammarRaw == NULL)
         exit(-1);
 
     size_t successfully_read = fread(grammarRaw, 1, fileSize, stream);
@@ -165,10 +167,10 @@ char *ReadGrammarFile(const char *filepath)
         exit(-1);
 
     int closed = fclose(stream);
-    if(closed != 0)
+    if (closed != 0)
         exit(-1);
 
     grammarRaw[fileSize] = 0;
-    
+
     return grammarRaw;
 }
