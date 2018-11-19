@@ -13,14 +13,14 @@
         }             \
     } while (0)
 
-#define _assertEqual(test, expected) \
-    do                               \
-    {                                \
-        if ((&test) != (&expected))  \
-        {                            \
-            FAIL();                  \
-            return 1;                \
-        }                            \
+#define _assertEqualPointer(test, expected) \
+    do                                      \
+    {                                       \
+        if ((&test) != (&expected))         \
+        {                                   \
+            FAIL();                         \
+            return 1;                       \
+        }                                   \
     } while (0)
 
 #define _assertEqualValue(test, expected) \
@@ -32,6 +32,7 @@
             return 1;                     \
         }                                 \
     } while (0)
+
 #define _verify(test)   \
     do                  \
     {                   \

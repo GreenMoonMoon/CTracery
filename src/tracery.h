@@ -4,6 +4,7 @@
 #define __TRACERY__
 
 #include "utils.h"
+#include "parser.h"
 
 enum TokenType
 {
@@ -13,23 +14,24 @@ enum TokenType
     EOR //End of rule
 };
 
-typedef struct Token
-{
-    enum TokenType type;
-    // char *raw;
-} Token;
-
-typedef struct Rule
-{
-    Token *tokens;
-} Rule;
-
 typedef struct Symbol
 {
-    char *name;
-    Rule *rules;
+    void *tokens;
     int count;
 } Symbol;
+
+typedef struct Text
+{
+    char *string;
+    int start, end;
+} Text;
+
+// typedef struct Symbol
+// {
+//     char *name;
+//     char **rules;
+//     int count;
+// } Symbol;
 
 typedef struct Trace
 {
@@ -46,23 +48,24 @@ typedef struct Grammar
 } Grammar;
 
 Grammar *CreateGrammar();
+Grammar *CreateGrammarFromStream();
 void FreeGrammar(Grammar *grammar);
+char *FlattenGrammar(Grammar *Grammar);
 
+void *AddSymbol(Grammar *grammar, char *symbolName);
 Trace *CreateTrace(Grammar *grammar); //Create Trace from "origin" symbol
 Trace *CreateTraceFromSymbol(Grammar *grammar, Symbol *symbol);
-char *CreateFlattenedTrace(Grammar *grammar);
-void AddSymbolToGrammar(Grammar *grammar, char *symbolName);
+// char *CreateFlattenedTrace(Grammar *grammar);
 Symbol *GetSymbolFromGrammar(Grammar *grammar, char *symbolName);
-void PushRulesToGrammar(Grammar *grammar, char *symbolName, Rule *rules, int rulesCount);
-Rule *PopRulesFromGrammar(Grammar *grammar, char *symbolName);
-Rule *GetRuleFromGrammar(Grammar *grammar, char *symbolName);
+void PushRulesToGrammar(Grammar *grammar, char *symbolName, char **rules, int rulesCount);
+char **PopRulesFromGrammar(Grammar *grammar, char *symbolName);
+char **GetRuleFromGrammar(Grammar *grammar, char *symbolName);
 
 void FreeTrace(Trace *trace);
 void ExpandTrace(Trace *trace);
-char *FlattenTrace(Trace *trace);
 
 Symbol *LoadSymbolFromString(char *symbolStr);
 void FreeSymbol(Symbol *symbol);
-Rule *GetRuleFromSymbol(Symbol *symbol);
- 
+char **GetRuleFromSymbol(Symbol *symbol);
+
 #endif

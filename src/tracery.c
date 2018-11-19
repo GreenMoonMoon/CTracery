@@ -6,6 +6,8 @@
 
 Grammar *CreateGrammar()
 {
+    //Represent a grammar object on the heap. hold arrays of symbols and rules
+    //to flatten.
     Grammar *newGrammar = malloc(sizeof(Grammar));
     if (newGrammar == NULL)
         exit(-1);
@@ -17,6 +19,11 @@ Grammar *CreateGrammar()
     return newGrammar;
 }
 
+Grammar *CreateGrammarFromStream(char *filepath)
+{
+    return NULL;
+}
+
 void FreeGrammar(Grammar *grammar)
 {
     //Make sure to free any structure within grammar.
@@ -24,6 +31,11 @@ void FreeGrammar(Grammar *grammar)
     for (i = 0; i < grammar->count; i++)
         FreeSymbol(&grammar->symbols[i]);
     free(grammar);
+}
+
+char *FlattenGrammar(Grammar *grammar)
+{
+    return "";
 }
 
 Trace *CreateTrace(Grammar *grammar)
@@ -45,15 +57,15 @@ Trace *CreateTraceFromSymbol(Grammar *grammar, Symbol *symbol)
     return newTrace;
 }
 
-char *CreateFlattenedTrace(Grammar *grammar)
-{
-    Trace *trace = CreateTrace(grammar);
-    char *flattened = FlattenTrace(trace);
-    FreeTrace(trace);
-    return flattened;
-}
+// char *CreateFlattenedTrace(Grammar *grammar)
+// {
+//     Trace *trace = CreateTrace(grammar);
+//     char *flattened = FlattenTrace(trace);
+//     FreeTrace(trace);
+//     return flattened;
+// }
 
-void AddSymbolToGrammar(Grammar *grammar, char *symbolName)
+Symbol *AddSymbolToGrammar(Grammar *grammar, char *symbolName)
 {
     //implemented using http://www.craftinginterpreters.com/chunks-of-bytecode.html
     if (grammar->count == grammar->capacity)
@@ -63,7 +75,8 @@ void AddSymbolToGrammar(Grammar *grammar, char *symbolName)
     }
 
     grammar->symbols[grammar->count] = (Symbol){.name = symbolName, .rules = NULL, .count = 0};
-    grammar->count++;
+    Symbol *symbol = &grammar->symbols[++grammar->count];
+    return symbol;
 }
 
 Symbol *GetSymbolFromGrammar(Grammar *grammar, char *symbolName)
@@ -77,18 +90,27 @@ Symbol *GetSymbolFromGrammar(Grammar *grammar, char *symbolName)
         if (grammar->symbols[i].name == symbolName)
             return grammar->symbols;
     }
-    return NULL;
+    Symbol *symbol = AddSymbolToGrammar(grammar, symbolName);
+    return symbol;
 }
 
-void PushRulesToGrammar(Grammar *grammar, char *symbolName, Rule *rules, int rulesCount)
+void PushRulesToGrammar(Grammar *grammar, char *symbolName, char **rules, int count)
 {
+    //TODO: currently each set of rules for symbols is stored somewhere on the
+    //stack. They should be all part of a single rules location in the heap,
+    //since a lot of these rules will be processed at the same time.
+    //TODO: The creation of symbol and theirs rules are done trought two
+    //separate process, however a symbol without rules is an exception, rules
+    //should be instanciated with the symbol.
     Symbol *symbol = GetSymbolFromGrammar(grammar, symbolName);
     if (symbol != NULL)
+    {
         symbol->rules = rules;
-    symbol->count = rulesCount;
+        symbol->count = count;
+    }
 }
 
-Rule *PopRulesFromGrammar(Grammar *grammar, char *symbolName)
+char **PopRulesFromGrammar(Grammar *grammar, char *symbolName)
 {
     Symbol *symbol = GetSymbolFromGrammar(grammar, symbolName);
     if (symbol != NULL)
@@ -96,13 +118,13 @@ Rule *PopRulesFromGrammar(Grammar *grammar, char *symbolName)
     return NULL;
 }
 
-Rule *GetRuleFromGrammar(Grammar *grammar, char *symbolName)
+char **GetRuleFromGrammar(Grammar *grammar, char *symbolName)
 {
     Symbol *symbol = GetSymbolFromGrammar(grammar, symbolName);
     if (symbol == NULL)
         return NULL;
 
-    Rule *rule = GetRuleFromSymbol(symbol);
+    char **rule = GetRuleFromSymbol(symbol);
     if (rule == NULL)
         return NULL;
 
@@ -119,19 +141,18 @@ void ExpandTrace(Trace *trace)
 {
 }
 
-char *FlattenTrace(Trace *trace)
-{
-    return "";
-}
-
 void FreeSymbol(Symbol *symbol)
 {
-    //FIXME: memory leak, the rules and tokens array are not freed
-    printf("WARNING: FreeSymbol() is not complete and will cause memory leak!\n");
+    int i;
+    for (i = 0; i < symbol->count; i++)
+    {
+        free(symbol->rules[i]);
+    }
+
     free(symbol);
 }
 
-Rule *GetRuleFromSymbol(Symbol *symbol)
+char **GetRuleFromSymbol(Symbol *symbol)
 {
     if (symbol->count > 0)
         return &symbol->rules[0];
