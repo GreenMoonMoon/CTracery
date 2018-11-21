@@ -10,15 +10,15 @@ enum TokenType
 {
     SYMBOL,
     TEXT,
-    ACTION,
+    RULE,
     EOR //End of rule
 };
 
-typedef struct Symbol
+typedef struct Token
 {
-    void *tokens;
-    int count;
-} Symbol;
+    void* data;
+    enum TokenType type;
+} Token;
 
 typedef struct Text
 {
@@ -26,23 +26,22 @@ typedef struct Text
     int start, end;
 } Text;
 
-// typedef struct Symbol
-// {
-//     char *name;
-//     char **rules;
-//     int count;
-// } Symbol;
-
-typedef struct Trace
+typedef struct Rule
 {
-    int placeholder;
-} Trace;
+    Token *tokens;
+    int count;
+} Rule;
+
+typedef struct Symbol
+{
+    Rule *rules;
+    int count;
+} Symbol;
 
 typedef struct Grammar
 {
-    //The symbols are first allocated in the Grammar struct, then their
-    //pointer is passed to the
     Symbol *symbols;
+    Rule *origin;
     int count;
     int capacity;
 } Grammar;
@@ -50,22 +49,16 @@ typedef struct Grammar
 Grammar *CreateGrammar();
 Grammar *CreateGrammarFromStream();
 void FreeGrammar(Grammar *grammar);
+void FreeSymbol(Symbol *symbol);
 char *FlattenGrammar(Grammar *Grammar);
 
-void *AddSymbol(Grammar *grammar, char *symbolName);
-Trace *CreateTrace(Grammar *grammar); //Create Trace from "origin" symbol
-Trace *CreateTraceFromSymbol(Grammar *grammar, Symbol *symbol);
-// char *CreateFlattenedTrace(Grammar *grammar);
-Symbol *GetSymbolFromGrammar(Grammar *grammar, char *symbolName);
-void PushRulesToGrammar(Grammar *grammar, char *symbolName, char **rules, int rulesCount);
-char **PopRulesFromGrammar(Grammar *grammar, char *symbolName);
-char **GetRuleFromGrammar(Grammar *grammar, char *symbolName);
+// void *AddSymbol(Grammar *grammar, char *symbolName);
+// Symbol *GetSymbolFromGrammar(Grammar *grammar, char *symbolName);
+// void PushRulesToGrammar(Grammar *grammar, char *symbolName, char **rules, int rulesCount);
+// char **PopRulesFromGrammar(Grammar *grammar, char *symbolName);
+// char **GetRuleFromGrammar(Grammar *grammar, char *symbolName);
 
-void FreeTrace(Trace *trace);
-void ExpandTrace(Trace *trace);
-
-Symbol *LoadSymbolFromString(char *symbolStr);
-void FreeSymbol(Symbol *symbol);
-char **GetRuleFromSymbol(Symbol *symbol);
+// Symbol *LoadSymbolFromString(char *symbolStr);
+// char **GetRuleFromSymbol(Symbol *symbol);
 
 #endif

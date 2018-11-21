@@ -50,38 +50,54 @@ int testGrammar()
 
 int testSymbol()
 {
-    char *ruleString = "someSymbol and someOtherSymbol";
-    Symbol someSymbol = {};
-    Symbol someOtherSymbol = {};
-    Text text = {.string=ruleString, .start=10, .end=15};
+    // Manualy parsed rules
+    char *testString = "someSymbol and someOtherSymbol";
 
-    Symbol testsymbol = {.tokens={&someSymbol, &text, &someOtherSymbol}, .count=3};
+    Text text = {.string = testString, .start = 1, .end = 14};
+    Text someSymbolText = {.string = testString, .start = 0, .end = 13};
+    Text someOtherSymbolText = {.string = testString, .start = 15, .end = 29};
+
+    Token textToken = {.data = (void *)&text, .type = TEXT};
+    Token someSymbolTextToken = {.data = (void *)&text, .type = TEXT};
+    Token someOtherSymbolTextToken = {.data = (void *)&text, .type = TEXT};
+
+    Rule someSymbolRule = {.tokens = &someSymbolTextToken, .count = 1};
+    Rule someOtherSymbolRule = {.tokens = &someOtherSymbolTextToken, .count = 1};
+
+    Token someSymbolRuleToken = {.data = (void *)&someSymbolRule, .type = RULE};
+    Token someOtherSymbolRuleToken = {.data = (void *)&someOtherSymbolRule, .type = RULE};
     
-    char *flattened = FlattenGrammar(grammar);
-    _assert(!strcmp("someSymbol and someOtherSymbol", flattened));
-    FreeGrammar(grammar);
+    Rule originRule = {.tokens = (Token []){someSymbolRuleToken, textToken, someOtherSymbolRuleToken}, .count = 3};
 
     Grammar *grammar = CreateGrammar();
-    char *flattened = FlattenGrammar(grammar);    
+    grammar->origin = &originRule;
+
+    char *flattened = FlattenGrammar(grammar);
     _assert(!strcmp("someSymbol and someOtherSymbol", flattened));
+    free(flattened);
+
+    // // Grammar *grammar = CreateGrammar();
+    // // char *flattened = FlattenGrammar(grammar);
+    // // _assert(!strcmp("someSymbol and someOtherSymbol", flattened));
 
     FreeGrammar(grammar);
+    free(flattened);
 
     return 0;
 }
 int testGrammarFromStream()
-{ 
+{
     char *filepath = "";
     Grammar *grammar = CreateGrammarFromStream(filepath);
     char *flattened = FlattenGrammar(grammar);
     printf("%s\n", flattened);
-    
+
     return 0;
 }
 
 int all_tests()
 {
-    _verify(testGrammar);
+    _verify(testSymbol);
     // _verify(testGrammarFromStream);
 
     return 0;
