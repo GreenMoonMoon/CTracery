@@ -22,8 +22,8 @@ typedef struct Token
 
 typedef struct Text
 {
-    char *string;
-    int start, end;
+    char *start;
+    size_t length;
 } Text;
 
 typedef struct Rule
@@ -50,7 +50,7 @@ Grammar *CreateGrammar();
 Grammar *CreateGrammarFromStream();
 void FreeGrammar(Grammar *grammar);
 void FreeSymbol(Symbol *symbol);
-char *FlattenGrammar(Grammar *Grammar);
+char *FlattenRule(Rule *rule);
 
 // void *AddSymbol(Grammar *grammar, char *symbolName);
 // Symbol *GetSymbolFromGrammar(Grammar *grammar, char *symbolName);

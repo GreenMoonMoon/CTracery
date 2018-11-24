@@ -2,17 +2,6 @@
 #include <stdio.h>
 #include <string.h>
 
-#define _is_flattened(symbol)     \
-    do                            \
-    {                             \
-        return (!(symbol->count)); \
-    } while (0)
-
-typedef struct Symbol
-{
-    int count;
-} Symbol;
-
 typedef struct dynarray
 {
     char **array;
@@ -48,31 +37,19 @@ void FreeDynarray(dynarray *d)
 
 int main(void)
 {
-    Symbol symA = {.count = 3};
-    Symbol symB = {.count = 0};
+    char stringA[] = "tests this string ";
+    char stringB[] = "with some functions";
+    char *stringC;
 
-    printf(_is_flattened(&symA) ? "True\n" : "False\n");
-    printf(_is_flattened(&symB) ? "True\n" : "False\n");
+    size_t size =  strlen(stringA) + strlen(stringB);
+    stringC = calloc(size, sizeof(char));
+    strcpy(stringC, stringA);
+    strcat(stringC, stringB);
 
-    // char *text = "this is a phrase with 7 elements";
-    // dynarray *d = NewDynarray(5);
+    printf("%s\n", stringC);
+    int position = strchr(stringC, 'g') - &stringC[0];
+    printf("First occurence of 'g' at %d\n", position);
 
-    // AppendDynarray(d, &text[0]);
-    // AppendDynarray(d, &text[5]);
-    // AppendDynarray(d, &text[8]);
-    // AppendDynarray(d, &text[10]);
-    // AppendDynarray(d, &text[17]);
-    // AppendDynarray(d, &text[22]);
-    // AppendDynarray(d, &text[24]);
-
-    // printf("%c\n", *d->array[0]);
-    // printf("%c\n", *d->array[1]);
-    // printf("%c\n", *d->array[2]);
-    // printf("%c\n", *d->array[3]);
-    // printf("%c\n", *d->array[4]);
-    // printf("%c\n", *d->array[5]);
-    // printf("%c\n", *d->array[6]);
-
-    // FreeDynarray(d);
+    free(stringC);
     return 0;
 }

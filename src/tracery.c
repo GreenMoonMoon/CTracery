@@ -38,21 +38,60 @@ void FreeSymbol(Symbol *symbol)
     free(symbol);
 }
 
-char *FlattenGrammar(Grammar *grammar)
+char *FlattenRule(Rule *rule)
 {
-    char *flattenText = malloc( 1 * sizeof(char));
+    //Ineficient but functionnal way of building the flattenText.
+    //Recurse trought all the rule to find the TEXT token and concat them until
+    //all the rules are returned. The final string represented the
+    //flattened trace. If a unexpanded trace is passed, the result is undefined.
+    //Param: rule: represent the root of the expanded trace.
 
+    char *flattenText = calloc(1, sizeof(char));
+    if (flattenText == NULL)
+        exit(-1);
+    size_t currentSize = 0;
+    size_t newSize;
+
+    int i;
+    for (i = 0; i < rule->count; i++)
+    {
+        Token *token = &rule->tokens[i];
+        if (token->type == RULE)
+        {
+            char *flattenedRuleText = FlattenRule(token->data);
+            char *oldFlattenedText = flattenText;
+            newSize = strlen(flattenedRuleText) + currentSize;
+
+            flattenText = calloc(newSize, sizeof(char));
+            if (flattenText == NULL)
+                exit(-1);
+            if (*flattenText != '/0')
+                strncpy(flattenText, oldFlattenedText, currentSize);
+            strncat(flattenText, flattenedRuleText, newSize);
+            currentSize = newSize;
+            free(oldFlattenedText);
+            free(flattenedRuleText);
+        }
+        else if (token->type == TEXT)
+        {
+            Text *textData = token->data;
+
+            char *oldFlattenedText = flattenText;
+            newSize = textData->length + currentSize;
+
+            flattenText = calloc(newSize, sizeof(char));
+            if (flattenText == NULL)
+                exit(-1);
+            if (*flattenText != '/0')
+                strncpy(flattenText, oldFlattenedText, currentSize);
+            strncat(flattenText, textData->start, textData->length);
+
+            currentSize = newSize;
+            free(oldFlattenedText);
+        }
+    }
 
     return flattenText;
-}
-
-private int calculateTraceSize(Rule *origin)
-{
-    size_t size = 0;
-
-    
-
-    return size
 }
 
 // Trace *CreateTrace(Grammar *grammar)
