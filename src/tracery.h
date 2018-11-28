@@ -16,7 +16,7 @@ enum TokenType
 
 typedef struct Token
 {
-    void* data;
+    void *data;
     enum TokenType type;
 } Token;
 
@@ -40,17 +40,20 @@ typedef struct Symbol
 
 typedef struct Grammar
 {
-    Symbol *symbols;
+    Rule *rules;
     Rule *origin;
     int count;
     int capacity;
 } Grammar;
 
 Grammar *CreateGrammar();
-Grammar *CreateGrammarFromStream();
+Grammar *CreateGrammarFromStream(FILE *stream);
 void FreeGrammar(Grammar *grammar);
+void FreeRule(Rule *rule);
 void FreeSymbol(Symbol *symbol);
 char *FlattenRule(Rule *rule);
+
+int ScanRule(Grammar *grammar, char *rule);
 
 // void *AddSymbol(Grammar *grammar, char *symbolName);
 // Symbol *GetSymbolFromGrammar(Grammar *grammar, char *symbolName);

@@ -4,6 +4,8 @@
 
 #include "tracery.h"
 
+const char *_delimiters = ":[]\"";
+
 Grammar *CreateGrammar()
 {
     //Represent a grammar object on the heap. hold arrays of symbols and rules
@@ -14,13 +16,18 @@ Grammar *CreateGrammar()
 
     newGrammar->capacity = 0;
     newGrammar->count = 0;
-    newGrammar->symbols = NULL;
+    newGrammar->rules = NULL;
+    newGrammar->origin = NULL;
 
     return newGrammar;
 }
 
-Grammar *CreateGrammarFromStream(char *filepath)
+Grammar *CreateGrammarFromStream(FILE *stream)
 {
+    int c;
+    while((c = getc(stream)) != EOF)
+        putchar(c);
+
     return NULL;
 }
 
@@ -29,8 +36,16 @@ void FreeGrammar(Grammar *grammar)
     //Make sure to free any structure within grammar.
     int i;
     for (i = 0; i < grammar->count; i++)
-        FreeSymbol(&grammar->symbols[i]);
+        FreeRule(&grammar->rules[i]);
     free(grammar);
+}
+
+void FreeRule(Rule *rule)
+{
+    int i;
+    for (i = 0; i < rule->count; i++)
+        free(rule->tokens[i].data);
+    free(rule->tokens);
 }
 
 void FreeSymbol(Symbol *symbol)
@@ -92,6 +107,38 @@ char *FlattenRule(Rule *rule)
     }
 
     return flattenText;
+}
+
+int ScanRule(Grammar *grammar, char *ruleStr)
+{
+    //This is a ScanSymbol function, rule should be scanned individualy, without the symbol identifier.
+    int scannedCount = 0, tokensCapacity = 0;
+    char *tokenStr = NULL;
+    Token *tokens = NULL;
+
+    printf("%s\n", ruleStr);
+    // tokenStr = strtok(ruleStr, _delimiters);
+    // while (tokenStr != NULL)
+    // {
+    //     if (tokensCapacity <= scannedCount)
+    //     {
+    //         tokensCapacity = GROW_CAPACITY(tokensCapacity);
+    //         tokens = GROW_ARRAY(tokens, Token, tokensCapacity);
+    //     }
+    //     tokens[scannedCount] = (Token) { .data = tokenStr, .type = TEXT };
+    // };
+    // printf("%s\n", tokenStr);
+    // tokenStr = strtok(NULL, _delimiters);
+
+    // //implemented using http://www.craftinginterpreters.com/chunks-of-bytecode.html
+    // if (grammar->count == grammar->capacity)
+    // {
+    //     grammar->capacity = GROW_CAPACITY(grammar->capacity);
+    //     grammar->rules = GROW_ARRAY(grammar->rules, Symbol, grammar->capacity);
+    // }
+    // grammar->rules[grammar->count] = (Rule *){.tokens = tokens, .count = scannedCount};
+
+    return scannedCount;
 }
 
 // Trace *CreateTrace(Grammar *grammar)

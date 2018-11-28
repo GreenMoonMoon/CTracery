@@ -4,41 +4,6 @@
 #include "unittest.h"
 #include "../src/tracery.h"
 
-// int TestParsesActions()
-// {
-//     int testTextBCount = 13;
-//     char *testTextB[13] = {
-//         "#hero# ate some #color# #animal.s#",
-//         "#someOtherSymbol.cap.pluralize#",
-//         "#[]#[]##",
-//         "#[#do some things#]symbol.mod[someotherthings[and a function]]#",
-//         "#[fxn][fxn][fxn[subfxn]]symbol[[fxn]]#",
-//         "#[fxn][#fxn#][fxn[#subfxn#]]symbol[[fxn]]#",
-//         "#[#setPronouns#][#setOccupation#][hero:#name#]story#",
-//         "#[fxn][fxn][fxn[subfxn]]symbol[fxn]]#",
-//         "[action]symbol.mod1.mod2[postAction]",
-//         "stuff[action]symbol.mod1.mod2[postAction]",
-//         "[action]symbol.mod1.mod2[postAction]stuff"
-//     };
-
-//     Grammar *grammar = CreateGrammar();
-//     char *ruleA[1] = {"someSymbol"};
-//     PushRulesToGrammar(grammar, "someSymbol", ruleA, 1);
-
-//     char *ruleB[1] = {"someOtherSymbol"};
-//     PushRulesToGrammar(grammar, "someOtherSymbol", ruleB, 1);
-
-//     // int i;
-//     // for (i = 0; i < testStringsCount; i++)
-//     // {
-//     //     AddSymbolToGrammar(grammar, testStrings[i]);
-//     // }
-
-//     FreeGrammar(grammar);
-
-//     return 0;
-// }
-
 int testGrammar()
 {
     Grammar *grammar = CreateGrammar();
@@ -48,7 +13,42 @@ int testGrammar()
     return 0;
 }
 
-int testSymbol()
+int testFlattenSymbol()
+{
+    // Manualy parsed rules
+    char *testString = "someSymbol and someOtherSymbol";
+
+    Text text = {.start = &testString[10], .length = 5};
+    Text someSymbolText = {.start = &testString[0], .length = 10};
+    Text someOtherSymbolText = {.start = &testString[15], .length = 15};
+
+    Token textToken = {.data = (void *)&text, .type = TEXT};
+    Token someSymbolTextToken = {.data = (void *)&someSymbolText, .type = TEXT};
+    Token someOtherSymbolTextToken = {.data = (void *)&someOtherSymbolText, .type = TEXT};
+
+    Rule someSymbolRule = {.tokens = &someSymbolTextToken, .count = 1};
+    Rule someOtherSymbolRule = {.tokens = &someOtherSymbolTextToken, .count = 1};
+
+    Token someSymbolRuleToken = {.data = (void *)&someSymbolRule, .type = RULE};
+    Token someOtherSymbolRuleToken = {.data = (void *)&someOtherSymbolRule, .type = RULE};
+
+    // This is essentially an expanded Trace.
+    Rule originRule = {.tokens = (Token[]){someSymbolRuleToken, textToken, someOtherSymbolRuleToken}, .count = 3};
+
+    Grammar *grammar = CreateGrammar();
+    grammar->origin = &originRule;
+
+    char *flattened = FlattenRule(grammar->origin);
+
+    _assert(!strcmp("someSymbol and someOtherSymbol", flattened));
+
+    free(flattened);
+    FreeGrammar(grammar);
+
+    return 0;
+}
+
+int testExpandSymbol()
 {
     // Manualy parsed rules
     char *testString = "someSymbol and someOtherSymbol";
@@ -76,27 +76,62 @@ int testSymbol()
     char *flattened = FlattenRule(grammar->origin);
     printf("%s\n", flattened);
 
-    _assert(!strcmp("someSymbol and someOtherSymbol", flattened));
+    _assert(!strcmp(testString, flattened));
     free(flattened);
 
     FreeGrammar(grammar);
 
     return 0;
 }
+
+int testScanRule()
+{
+    Grammar *grammar = CreateGrammar();
+
+    char *testRule = "origin:[\"origin\"]";
+    int scanned = ScanRule(grammar, testRule);
+
+    // printf("%s\n", testRule);
+    // _assert(scanned);
+
+    // // Token *tokens = grammar->rules[0].tokens;
+
+    // // _assert(tokens[0].type == TEXT);
+    // // _assert(strcmp((char *)tokens[0].data, "origin"));
+
+    FreeGrammar(grammar);
+
+    return 0;
+}
+
 int testGrammarFromStream()
 {
-    char *filepath = "";
-    Grammar *grammar = CreateGrammarFromStream(filepath);
-    char *flattened = FlattenRule(grammar->origin);
-    printf("%s\n", flattened);
+    FILE *testStream = tmpfile();
+    _assert(testStream != NULL);
+
+    char src[] = {
+        "someSymbol:[\"SymbolA\", \"SymbolB\"]\n"
+        "someOtherSymbol:[\"OtherSymbolA\", \"OtherSymbolB\"]\n"
+        "origin:[\"#someSymbol and someOtherSymbol#\"]\0"
+    };
+    fputs(src, testStream);
+    rewind(testStream);
+
+    Grammar *grammar = CreateGrammarFromStream(testStream);
+    _assert(grammar);
+    // Grammar *grammar = CreateGrammarFromStream(testStream);
+
+    // FreeGrammar(grammar);
 
     return 0;
 }
 
 int all_tests()
 {
-    _verify(testSymbol);
-    // _verify(testGrammarFromStream);
+    // _verify(testFlattenSymbol);
+    // _verify(testExpandSymbol);
+    // _verify(testScanRule);
+    _verify(testGrammarFromStream);
 
     return 0;
 }
