@@ -1,6 +1,8 @@
 #include <stdlib.h>
 #include <stdio.h>
-#include <string.h>
+// #include <string.h>
+
+#include <wchar.h>
 
 typedef struct dynarray
 {
@@ -35,43 +37,32 @@ void FreeDynarray(dynarray *d)
     free(d);
 }
 
+static int compareKey(const char *key1, const char *key2)
+{
+    int i = 0;
+    while (key1[i] == key2[i])
+    {
+        if (key1[i] == '\0')
+            return 1;
+        i++;
+    }
+    return 0;
+}
+
 int main(void)
 {
-    char stringA[] = "tests this string ";
-    char *testRule = "origin:[\"origin\"]";
-    // char stringB[] = "with some functions";
-    // char *stringC;
+    char *key1 = "test";
+    char *key2 = "test";
+    char *key3 = "tezt";
 
-    // size_t size =  strlen(stringA) + strlen(stringB);
-    // stringC = calloc(size, sizeof(char));
-    // strcpy(stringC, stringA);
-    // strcat(stringC, stringB);
-
-    // printf("%s\n", stringC);
-    // int position = strchr(stringC, 'g') - &stringC[0];
-    // printf("First occurence of 'g' at %d\n", position);
-
-    // free(stringC);
-
-    // char *t;
-    // t = strtok(stringA, " ");
-    // while(t != NULL)
-    // {
-    //     printf("%s\n", t);
-    //     t = strtok(NULL, " ");
-    // }
-
-    char *t;
-    size_t span;
-    
-    span = strspn(testRule, ':');
-    printf("%s\n", t);
-    
-    while(t != NULL)
-    {
-        printf("%s\n", t);
-        t = strtok(NULL, "\"[]");
-    }
+    if (compareKey(key1, key2))
+        printf("First is true!\n");
+    else
+        printf("First failed!!!!");
+    if (!compareKey(key1, key3))
+        printf("Second is false!\n");
+    else
+        printf("Second failed!!!!");
 
     return 0;
 }

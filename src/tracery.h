@@ -6,6 +6,8 @@
 #include "utils.h"
 #include "parser.h"
 
+extern const char *_delimiters;
+
 enum TokenType
 {
     SYMBOL,
@@ -34,6 +36,7 @@ typedef struct Rule
 
 typedef struct Symbol
 {
+    char *key;
     Rule *rules;
     int count;
 } Symbol;
@@ -42,8 +45,8 @@ typedef struct Grammar
 {
     Rule *rules;
     Rule *origin;
-    int count;
-    int capacity;
+    unsigned int count;
+    unsigned int capacity;
 } Grammar;
 
 Grammar *CreateGrammar();

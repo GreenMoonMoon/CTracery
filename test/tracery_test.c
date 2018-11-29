@@ -4,6 +4,33 @@
 #include "unittest.h"
 #include "../src/tracery.h"
 
+int testMap()
+{
+    Symbol a = {.key = (char *)"symbolA", .rules = NULL, .count = 0};
+    Symbol b = {.key = (char *)"symbolB", .rules = NULL, .count = 0};
+    Symbol c = {.key = (char *)"symbolC", .rules = NULL, .count = 0};
+    Symbol d = {.key = (char *)"symbolD", .rules = NULL, .count = 0};
+    Symbol e = {.key = (char *)"symbolE", .rules = NULL, .count = 0};
+    Map testMap = (Map){.capacity = 0, .count = 0, .pairs = NULL};
+    AddPair(&testMap, a.key, &a);
+    AddPair(&testMap, b.key, &b);
+    AddPair(&testMap, c.key, &c);
+
+    Symbol *p = (Symbol *)AddPair(&testMap, d.key, &d);
+    _assert(p == &d);
+
+    // p = ModifyPair(&testMap, d.key, &e);
+    // _assert(p == &e);
+
+    p = (Symbol *)Lookup(&testMap, b.key);
+    _assert(p == &b);
+
+    // RemovePair(&testMap, e.key);
+    // _assert(testMap.count == 3);
+
+    return 0;
+}
+
 int testGrammar()
 {
     Grammar *grammar = CreateGrammar();
@@ -112,8 +139,7 @@ int testGrammarFromStream()
     char src[] = {
         "someSymbol:[\"SymbolA\", \"SymbolB\"]\n"
         "someOtherSymbol:[\"OtherSymbolA\", \"OtherSymbolB\"]\n"
-        "origin:[\"#someSymbol and someOtherSymbol#\"]\0"
-    };
+        "origin:[\"#someSymbol and someOtherSymbol#\"]\0"};
     fputs(src, testStream);
     rewind(testStream);
 
@@ -128,6 +154,7 @@ int testGrammarFromStream()
 
 int all_tests()
 {
+    _verify(testMap);
     // _verify(testFlattenSymbol);
     // _verify(testExpandSymbol);
     // _verify(testScanRule);

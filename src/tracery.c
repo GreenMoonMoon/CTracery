@@ -5,6 +5,7 @@
 #include "tracery.h"
 
 const char *_delimiters = ":[]\"";
+static int compareKey(const char *key1, const char *key2);
 
 Grammar *CreateGrammar()
 {
@@ -25,7 +26,7 @@ Grammar *CreateGrammar()
 Grammar *CreateGrammarFromStream(FILE *stream)
 {
     int c;
-    while((c = getc(stream)) != EOF)
+    while ((c = getc(stream)) != EOF)
         putchar(c);
 
     return NULL;
@@ -254,7 +255,7 @@ int ScanRule(Grammar *grammar, char *ruleStr)
 //     return NULL;
 // }
 
-void *reallocate(void *previous, size_t capacity)
+void *Reallocate(void *previous, size_t capacity)
 {
     if (capacity == 0)
     {
@@ -289,4 +290,42 @@ char *ReadGrammarFile(const char *filepath)
     grammarRaw[fileSize] = 0;
 
     return grammarRaw;
+}
+
+void *AddPair(Map *map, const char *key, void *value)
+{
+    if (map->count >= map->capacity)
+    {
+        map->capacity = GROW_CAPACITY(map->capacity);
+        map->pairs = GROW_ARRAY(map->pairs, void *, map->capacity);
+    }
+    map->pairs[map->count] = value;
+    map->count++;
+
+    return map->pairs[map->count - 1];
+}
+
+void *Lookup(Map *map, const char *key)
+{
+    int i;
+    Symbol *symbol;
+    for (i = 0; i < map->count; i++)
+    {
+        symbol = (Symbol *)map->pairs[i];
+        if (compareKey(key, symbol->key))
+            return (void *)symbol;
+    }
+    return NULL;
+}
+
+static int compareKey(const char *key1, const char *key2)
+{
+    int i = 0;
+    while (key1[i] == key2[i])
+    {
+        if (key1[i] == '\0')
+            return 1;
+        i++;
+    }
+    return 0;
 }
