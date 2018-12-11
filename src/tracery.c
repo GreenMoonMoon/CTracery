@@ -4,8 +4,7 @@
 
 #include "tracery.h"
 
-const char *_delimiters = ":[]\"";
-static int compareKey(const char *key1, const char *key2);
+const int verbose = 1;
 
 Grammar *CreateGrammar()
 {
@@ -25,9 +24,31 @@ Grammar *CreateGrammar()
 
 Grammar *CreateGrammarFromStream(FILE *stream)
 {
-    int c;
-    while ((c = getc(stream)) != EOF)
-        putchar(c);
+    const char *delimiters = ":[]\",#";
+    char *grammarRaw = ReadStream(stream);
+
+    TokenArray *tokens;
+    int first;
+    int next;
+
+    char *i;
+    for (i = grammarRaw; *i != '\0'; i++)
+    {
+        // printf("%c", *i);
+        next = strcspn(i, delimiters);
+        *(i + next) = '\0';
+        if (*i != '\n')
+            printf("%s ", i);
+
+        switch (*(i + next))
+        {
+        case ':':
+            PushToken(tokens, SYMBOL, i);
+            break;
+        }
+
+        i += next;
+    }
 
     return NULL;
 }
@@ -140,6 +161,16 @@ int ScanRule(Grammar *grammar, char *ruleStr)
     // grammar->rules[grammar->count] = (Rule *){.tokens = tokens, .count = scannedCount};
 
     return scannedCount;
+}
+
+void PushToken(TokenArray *tokens, enum TokenType type, char *raw)
+{
+    if (tokens->count >= tokens->capacity)
+    {
+        tokens->capacity = GROW_CAPACITY(tokens->capacity);
+        tokens->tokens = GROW_ARRAY(tokens->tokens, Token, tokens->capacity);
+    }
+    tokens->tokens[tokens->count] = (Token){.data=raw, .type=type};
 }
 
 // Trace *CreateTrace(Grammar *grammar)
@@ -266,32 +297,6 @@ void *Reallocate(void *previous, size_t capacity)
     return realloc(previous, capacity);
 }
 
-char *ReadGrammarFile(const char *filepath)
-{
-    //Reads the grammar file are allocate the content on the heap.
-    //Returns a pointer to the string.
-    FILE *stream = fopen(filepath, "r");
-    fseek(stream, 0, SEEK_END);
-    long fileSize = ftell(stream);
-    fseek(stream, 0, SEEK_SET);
-
-    char *grammarRaw = malloc(fileSize + 1);
-    if (grammarRaw == NULL)
-        exit(-1);
-
-    size_t successfully_read = fread(grammarRaw, 1, fileSize, stream);
-    if (successfully_read != fileSize)
-        exit(-1);
-
-    int closed = fclose(stream);
-    if (closed != 0)
-        exit(-1);
-
-    grammarRaw[fileSize] = 0;
-
-    return grammarRaw;
-}
-
 void *AddPair(Map *map, const char *key, void *value)
 {
     if (map->count >= map->capacity)
@@ -312,20 +317,31 @@ void *Lookup(Map *map, const char *key)
     for (i = 0; i < map->count; i++)
     {
         symbol = (Symbol *)map->pairs[i];
-        if (compareKey(key, symbol->key))
+        if (!strcmp(key, symbol->key))
             return (void *)symbol;
     }
     return NULL;
 }
 
-static int compareKey(const char *key1, const char *key2)
+char *ReadStream(FILE *stream)
 {
-    int i = 0;
-    while (key1[i] == key2[i])
-    {
-        if (key1[i] == '\0')
-            return 1;
-        i++;
-    }
-    return 0;
+    fseek(stream, 0, SEEK_END);
+    long fileSize = ftell(stream);
+    fseek(stream, 0, SEEK_SET);
+
+    char *grammarRaw = malloc(fileSize + 1);
+    if (grammarRaw == NULL)
+        exit(-1);
+
+    size_t successfully_read = fread(grammarRaw, 1, fileSize, stream);
+    if (successfully_read != fileSize)
+        exit(-1);
+
+    int closed = fclose(stream);
+    if (closed != 0)
+        exit(-1);
+
+    grammarRaw[fileSize] = '\0';
+
+    return grammarRaw;
 }

@@ -139,15 +139,14 @@ int testGrammarFromStream()
     char src[] = {
         "someSymbol:[\"SymbolA\", \"SymbolB\"]\n"
         "someOtherSymbol:[\"OtherSymbolA\", \"OtherSymbolB\"]\n"
-        "origin:[\"#someSymbol and someOtherSymbol#\"]\0"};
+        "origin:[\"#someSymbol# and #someOtherSymbol#\"]\0"};
     fputs(src, testStream);
     rewind(testStream);
 
     Grammar *grammar = CreateGrammarFromStream(testStream);
     _assert(grammar);
-    // Grammar *grammar = CreateGrammarFromStream(testStream);
 
-    // FreeGrammar(grammar);
+    FreeGrammar(grammar);
 
     return 0;
 }

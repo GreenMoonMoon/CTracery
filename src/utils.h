@@ -15,13 +15,11 @@ typedef struct Map
     void **pairs;
 } Map;
 
+void *AddPair(Map *map, const char *key, void *value);
+void *Lookup(Map *map, const char *key);
+
 void *Reallocate(void *previous, size_t capacity);
 
-char *ReadGrammarFile(const char *filepath);
-
-void *AddPair(Map *map, const char *key, void *value);
-// void *ModifyPair(Map *map, const char *key, void *value);
-// void RemovePair(Map *map, const char *key);
-void  *Lookup(Map *map, const char *key);
+char *ReadStream(FILE *stream);
 
 #endif

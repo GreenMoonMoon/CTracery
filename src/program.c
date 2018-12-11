@@ -1,68 +1,70 @@
-#include <stdlib.h>
+#include <stdbool.h>
 #include <stdio.h>
-// #include <string.h>
 
-#include <wchar.h>
+#include "program.h"
+#include "list.h"
 
-typedef struct dynarray
+int main(int argc, const char *argv[])
 {
-    char **array;
-    int count;
-    int capacity;
-} dynarray;
+    Chunk *c = &(Chunk){.codes = NULL, .count = 0, .capacity = 0};
+    InitChunk(c);
+    WriteChunk(c, 1);
+    WriteChunk(c, 2);
+    WriteChunk(c, 3);
+    WriteChunk(c, 4);
+    WriteChunk(c, 5);
+    WriteChunk(c, 6);
+    WriteChunk(c, 7);
+    WriteChunk(c, 8);
+    WriteChunk(c, 9);
+    WriteChunk(c, 10);
+    WriteChunk(c, 11);
+    WriteChunk(c, 12);
+    WriteChunk(c, 13);
+    WriteChunk(c, 14);
+    WriteChunk(c, 15);
+    WriteChunk(c, 16);
 
-dynarray *NewDynarray(int capacity)
-{
-    dynarray *d = malloc(sizeof(dynarray));
-    (*d).array = malloc(capacity * sizeof(char *));
-    (*d).count = 0;
-    (*d).capacity = capacity;
+    printf("current count:%d\n", c->count);
+    printf("chunk[0]:%d\n", c->codes[0]);
+    printf("chunk[15]:%d\n", c->codes[15]);
 
-    return d;
-}
-
-void AppendDynarray(dynarray *d, char *value)
-{
-    if (d->count == d->capacity)
-    {
-        d->capacity *= 2;
-        d->array = realloc(d->array, d->capacity * sizeof(char *));
-    }
-    d->array[d->count++] = value;
-}
-
-void FreeDynarray(dynarray *d)
-{
-    free((*d).array);
-    free(d);
-}
-
-static int compareKey(const char *key1, const char *key2)
-{
-    int i = 0;
-    while (key1[i] == key2[i])
-    {
-        if (key1[i] == '\0')
-            return 1;
-        i++;
-    }
     return 0;
 }
 
-int main(void)
+void InitChunk(Chunk *chunk)
 {
-    char *key1 = "test";
-    char *key2 = "test";
-    char *key3 = "tezt";
+    chunk->capacity = 0;
+    chunk->count = 0;
+    chunk->codes = NULL;
+}
 
-    if (compareKey(key1, key2))
-        printf("First is true!\n");
-    else
-        printf("First failed!!!!");
-    if (!compareKey(key1, key3))
-        printf("Second is false!\n");
-    else
-        printf("Second failed!!!!");
+void FreeChunk(Chunk *chunk)
+{
+    FREE_ARRAY(unsigned int, chunk, chunk->capacity);
+    InitChunk(chunk);
+}
 
-    return 0;
+void WriteChunk(Chunk *chunk, unsigned int code)
+{
+    if (chunk->count >= chunk->capacity)
+    {
+        int oldCapacity = chunk->capacity;
+        chunk->capacity = GROW_CAPACITY(chunk->capacity);
+        chunk->codes = GROW_ARRAY(chunk->codes, unsigned int, oldCapacity, chunk->capacity);
+    }
+
+    chunk->codes[chunk->count++] = code;
+    // chunk->count++;
+}
+
+void *Reallocate(void *previous, size_t oldCapacity, size_t newCapacity)
+{
+    if (newCapacity == 0)
+    {
+        free(previous);
+        return NULL;
+    }
+
+    return realloc(previous, newCapacity);
 }

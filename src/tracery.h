@@ -6,13 +6,12 @@
 #include "utils.h"
 #include "parser.h"
 
-extern const char *_delimiters;
-
 enum TokenType
 {
     SYMBOL,
     TEXT,
     RULE,
+    RULESET,
     EOR //End of rule
 };
 
@@ -21,6 +20,13 @@ typedef struct Token
     void *data;
     enum TokenType type;
 } Token;
+
+typedef struct TokenArray
+{
+    Token *tokens;
+    int count;
+    int capacity;
+} TokenArray;
 
 typedef struct Text
 {
@@ -57,6 +63,7 @@ void FreeSymbol(Symbol *symbol);
 char *FlattenRule(Rule *rule);
 
 int ScanRule(Grammar *grammar, char *rule);
+void PushToken(TokenArray *tokens, enum TokenType, char *raw);
 
 // void *AddSymbol(Grammar *grammar, char *symbolName);
 // Symbol *GetSymbolFromGrammar(Grammar *grammar, char *symbolName);
